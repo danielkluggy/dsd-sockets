@@ -9,23 +9,17 @@ import Server.Model.Pessoa;
 
 public class PessoaController extends MessageController {
 
-	String cpf;
-	String nome = null;
-	String endereco = null;
 	String msg;
 	
 	public PessoaController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
 		super(conn, db, campos, operacao);
-		this.cpf = campos[2];
-		this.nome = campos[3];
-		this.endereco = campos[4];
 	}
 
 	@Override
 	public void insert() throws IOException {
 		boolean cpfExiste = false;
 		for(Pessoa pessoa : db.pessoas) {
-			if(pessoa.getCpf().equals(cpf)) {
+			if(pessoa.getCpf().equals(campos[2])) {
 				cpfExiste = true;
 				break;
 			}
@@ -33,9 +27,9 @@ public class PessoaController extends MessageController {
 		if(cpfExiste == true) {
 			msg = "Pessoa já cadastrada";
 		} else {
-			Pessoa pessoa = new Pessoa(cpf);
-			pessoa.setNome(nome);
-			pessoa.setEndereco(endereco);
+			Pessoa pessoa = new Pessoa(campos[2]);
+			pessoa.setNome(campos[3]);
+			pessoa.setEndereco(campos[4]);
 			db.pessoas.add(pessoa);
 			msg = "Pessoa cadastrada";
 		}
@@ -47,10 +41,10 @@ public class PessoaController extends MessageController {
 	public void update() throws IOException {
 		boolean cpfExiste = false;
 		for(Pessoa pessoa : db.pessoas) {
-			if(pessoa.getCpf().equals(cpf)) {
+			if(pessoa.getCpf().equals(campos[2])) {
 				cpfExiste = true;
-				pessoa.setNome(nome);
-				pessoa.setEndereco(endereco);
+				pessoa.setNome(campos[3]);
+				pessoa.setEndereco(campos[4]);
 				break;
 			}
 		}
@@ -68,7 +62,7 @@ public class PessoaController extends MessageController {
 		boolean cpfExiste = false;
 		if(db.pessoas.size() > 0) {
 			for(Pessoa pessoa : db.pessoas) {
-				if(pessoa.getCpf().equals(cpf)) {
+				if(pessoa.getCpf().equals(campos[2])) {
 					cpfExiste = true;
 					msg = pessoa.toString();
 					break;
@@ -89,7 +83,7 @@ public class PessoaController extends MessageController {
 		boolean cpfExiste = false;
 		if(db.pessoas.size() > 0) {
 			for(Pessoa pessoa : db.pessoas) {
-				if(pessoa.getCpf().equals(cpf)) {
+				if(pessoa.getCpf().equals(campos[2])) {
 					cpfExiste = true;
 					db.pessoas.remove(pessoa);
 					msg = "Pessoa removida com sucesso";
