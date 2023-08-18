@@ -5,5 +5,7 @@ public enum Operacao {
 	UPDATE,
 	GET,
 	DELETE,
-	LIST
+	LIST,
+	ADD_TECNICO,
+	ADD_JOGADOR
 }

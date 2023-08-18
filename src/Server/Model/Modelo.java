@@ -1,5 +1,7 @@
 package Server.Model;
 
 public enum Modelo {
-	PESSOA
+	JOGADOR,
+	TECNICO,
+	TIME
 }
