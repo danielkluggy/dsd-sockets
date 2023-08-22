@@ -6,6 +6,9 @@ public class Pessoa {
 	private String nome;
 	private String endereco;
 
+	public Pessoa() {
+	}
+
 	public Pessoa(String cpf) {
 		this.cpf = cpf;
 	}
@@ -32,7 +35,7 @@ public class Pessoa {
 
 	@Override
 	public String toString() {
-		return cpf + ";" + nome + ";" + endereco;
+		return cpf + ";" + nome + ";" + endereco + ".";
 	}
 	
 	

@@ -5,54 +5,49 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Client {
 	
 	public static void main (String[] args) throws IOException, InterruptedException {
 	
-		//System.out.println("Criando conexão...");
+		System.out.println("Criando conexão...");
 		
-		List<String> msgs = new ArrayList<String>();
-		msgs.add("INSERT;JOGADOR;111;JOGADOR 1;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;JOGADOR;222;JOGADOR 22;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;JOGADOR;333;JOGADOR 3;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;TECNICO;444;TECNICO 1;RIO DO SUL;HEAD COACH");
-		msgs.add("INSERT;TECNICO;555;TECNICO 22;RIO DO SUL;HEAD COACH");
-		msgs.add("INSERT;TECNICO;666;TECNICO 3;RIO DO SUL;HEAD COACH");	
-		msgs.add("INSERT;JOGADOR;TIME 1;NBA");
-		msgs.add("INSERT;JOGADOR;TIME 22;NBA");
-		msgs.add("INSERT;JOGADOR;TIME 3;NBA");
-		msgs.add("UPDATE;JOGADOR;222;JOGADOR 2;RIO DO SUL;ARMADOR");
-		msgs.add("UPDATE;TECNICO;555;TECNICO 2;RIO DO SUL;HEAD COACH");
-		msgs.add("UPDATE;JOGADOR;TIME 2;NBA");
-		msgs.add("ADD_JOGADOR;TIME 1;111");
-		msgs.add("ADD_JOGADOR;TIME 2;222");
-		msgs.add("ADD_JOGADOR;TIME 3;333");
-		msgs.add("ADD_TECNICO;TIME 1;444");
-		msgs.add("ADD_TECNICO;TIME 2;555");
-		msgs.add("ADD_TECNICO;TIME 2;666");
-		msgs.add("LIST;JOGADOR");
-		msgs.add("LIST;TECNICO");
-		msgs.add("LIST;TIME");
-		msgs.add("GET;JOGADOR;222");
-		msgs.add("GET;TECNICO;555");
-		msgs.add("GET;TIME;TIME 2");		
-		msgs.add("DELETE;JOGADOR;333");
-		msgs.add("DELETE;TECNICO;333");
-		msgs.add("DELETE;TIME;TIME 3");
-		msgs.add("LIST;JOGADOR");
-		msgs.add("LIST;TECNICO");
-		msgs.add("LIST;TIME");
+		String[] msgs = new String[25];
+		//Pessoa
+		msgs[0] = "INSERT;PESSOA;12345678900;DANIEL;RIO DO SUL";
+		msgs[1] = "INSERT;PESSOA;12345678901;DANIEL KLUG;RIO DO SUL";
+		msgs[2] = "INSERT;PESSOA;12345678902;DANIEL KLUG;RIO DO SUL";
+		msgs[3] = "UPDATE;PESSOA;12345678903;DANIEL LARION KLUG;RIO DO SUL";
+		msgs[4] = "LIST;PESSOA";
+		msgs[5] = "GET;PESSOA;12345678900";
+		msgs[6] = "GET;PESSOA;12345678901";
+		msgs[7] = "DELETE;PESSOA;12345678901";
+		msgs[8] = "LIST;PESSOA";
+		//TIME
+		msgs[9] = "INSERT;TIME;SAO PAULO;BRASILEIRAO";
+		msgs[10] = "INSERT;TIME;FLAMENGO;BRASILEIRAO";
+		msgs[11] = "INSERT;TIME;BARCELONA;LIGA ESPANHOLA";
+		msgs[12] = "UPDATE;TIME;FLAMENGO;COPA DO BRASIL";
+		msgs[13] = "LIST;TIME";
+		msgs[14] = "GET;TIME;SAO PAULO";
+		msgs[15] = "GET;TIME;FLAMENGO";
+		msgs[16] = "DELETE;TIME;FLAMENGO";
+		msgs[17] = "LIST;TIME";
+		msgs[18] = "INSERT;PESSOATIME;12345678900;DANIEL;RIO DO SUL;SAO PAULO";
+		msgs[19] = "INSERT;PESSOATIME;12345678900;DANIEL;RIO DO SUL;FLAMENGO";
+		msgs[20] = "INSERT;PESSOATIME;12345678900;DANIEL;RIO DO SUL,BARCELONA";
+		msgs[21] = "INSERT;PESSOATIME;12345678902;DANIEL KLUG;RIO DO SUL;BARCELONA";
+		msgs[22] = "GET;PESSOATIME;12345678900";
+		msgs[23] = "DELETE;PESSOATIME;12345678900;DANIEL;SAO PAULO";
+		msgs[24] = "LIST;PESSOATIME";
 		
-		for(int i = 0; i < msgs.size(); i++) {
+		for(int i = 0; i < msgs.length; i++) {
 			
-			try (Socket conn = new Socket ("127.0.0.1", 80);) {
+			try (Socket conn = new Socket ("10.1.1.104", 80);) {
 				//System.out.println("Conectando");
 				OutputStream out = conn.getOutputStream();
 				
-				out.write(msgs.get(i).getBytes());
+				out.write(msgs[i].getBytes());
 				
 				InputStream in = conn.getInputStream();
 				byte[] dadosBrutos = new byte[1024];

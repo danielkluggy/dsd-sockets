@@ -6,6 +6,6 @@ public enum Operacao {
 	GET,
 	DELETE,
 	LIST,
-	ADD_TECNICO,
-	ADD_JOGADOR
+	ADDJOGADOR,
+	REMOVEJOGADOR
 }

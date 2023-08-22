@@ -40,10 +40,6 @@ public abstract class MessageController {
 		case LIST:
 			list();
 			break;
-		case ADD_JOGADOR:
-			add_jogador();
-		case ADD_TECNICO:
-			add_tecnico();
 		default:
 			break;
 		}
@@ -54,8 +50,4 @@ public abstract class MessageController {
 	public abstract void get() throws IOException;
 	public abstract void delete() throws IOException;
 	public abstract void list() throws IOException;
-	
-	public void add_tecnico() throws IOException {}
-	public void add_jogador() throws IOException {}
-		
 }

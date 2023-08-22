@@ -5,10 +5,7 @@ import java.util.List;
 
 public class Database {
 	
-	public List<Jogador> jogadores = new ArrayList<>();
-	
-	public List<Tecnico> tecnicos = new ArrayList<>();
-	
+	public List<Pessoa> pessoas = new ArrayList<>();
 	public List<Time> times = new ArrayList<>();
-	
+	public List<PessoaTime> pessoasTimes = new ArrayList<>();
 }

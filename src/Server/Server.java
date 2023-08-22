@@ -6,8 +6,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import Server.Controller.JogadorController;
-import Server.Controller.TecnicoController;
+import Server.Controller.PessoaController;
+import Server.Controller.PessoaTimeController;
 import Server.Controller.TimeController;
 import Server.Model.Database;
 import Server.Model.Modelo;
@@ -37,8 +37,8 @@ public class Server {
 				
 				comando(conn, db, msg);
 			} catch (Exception e) {
-                System.out.println("Exception");
-                e.printStackTrace();
+                //System.out.println("Exception");
+                //e.printStackTrace();
 			} finally {
 				if (conn != null) {
 					conn.close();
@@ -53,19 +53,19 @@ public class Server {
 		Operacao operacao = Operacao.valueOf(campos[0]);
 		Modelo modelo = Modelo.valueOf(campos[1]);
 		
+		
 		switch (modelo) {
-		case JOGADOR:
-			//Usar um singleton pra criar uma única pessoa controller
-			JogadorController pessoa = new JogadorController(conn, db, campos, operacao);
+		case PESSOA:
+			PessoaController pessoa = new PessoaController(conn, db, campos, operacao);
 			pessoa.comando();
-			break;
-		case TECNICO:
-			TecnicoController tecnico = new TecnicoController(conn, db, campos, operacao);
-			tecnico.comando();
 			break;
 		case TIME:
 			TimeController time = new TimeController(conn, db, campos, operacao);
 			time.comando();
+		case PESSOATIME:
+			PessoaTimeController pessoatime = new PessoaTimeController(conn, db, campos, operacao);
+			pessoatime.comando();
+			break;
 		default:
 			break;
 		}
