@@ -1,7 +1,7 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.io.PrintWriter;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -12,8 +12,8 @@ public class TecnicoController extends MessageController {
 
 	String msg;
 	
-	public TecnicoController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(conn, db, campos, operacao);
+	public TecnicoController(PrintWriter out, Database db, String[] campos, Operacao operacao) throws IOException {
+		super(out, db, campos, operacao);
 	}
 
 	@Override
@@ -35,13 +35,13 @@ public class TecnicoController extends MessageController {
 			msg = "Pessoa já cadastrada";
 		} else {
 			Tecnico tecnico = new Tecnico(campos[2]);
-			tecnico.setNome(campos[3].toUpperCase());
-			tecnico.setEndereco(campos[4].toUpperCase());
-			tecnico.setEspecialidade(campos[5].toUpperCase());
+			tecnico.setNome(campos[3]);
+			tecnico.setEndereco(campos[4]);
+			tecnico.setEspecialidade(campos[5]);
 			db.tecnicos.add(tecnico);
 			msg = "Técnico cadastrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -51,9 +51,9 @@ public class TecnicoController extends MessageController {
 		for(Tecnico tecnico : db.tecnicos) {
 			if(tecnico.getCpf().equals(campos[2])) {
 				cpfExiste = true;
-				tecnico.setNome(campos[3].toUpperCase());
-				tecnico.setEndereco(campos[4].toUpperCase());
-				tecnico.setEspecialidade(campos[5].toUpperCase());
+				tecnico.setNome(campos[3]);
+				tecnico.setEndereco(campos[4]);
+				tecnico.setEspecialidade(campos[5]);
 				break;
 			}
 		}
@@ -62,7 +62,7 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Técnico não encontrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -83,7 +83,7 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Sem técnicos cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -95,6 +95,9 @@ public class TecnicoController extends MessageController {
 				if(tecnico.getCpf().equals(campos[2])) {
 					cpfExiste = true;
 					db.tecnicos.remove(tecnico);
+					if(tecnico.getTime() != null) {
+						tecnico.getTime().removeTecnico(tecnico);
+					}
 					msg = "Técnico removido com sucesso";
 					break;
 				}
@@ -105,7 +108,7 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Sem técnicos cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -115,7 +118,7 @@ public class TecnicoController extends MessageController {
 		for(Tecnico tecnico : db.tecnicos) {
 			msg += "\n" + tecnico.toString();
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 }

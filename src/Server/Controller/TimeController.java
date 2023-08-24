@@ -1,7 +1,7 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.io.PrintWriter;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -13,15 +13,15 @@ public class TimeController extends MessageController {
 
 	String msg;
 	
-	public TimeController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(conn, db, campos, operacao);
+	public TimeController(PrintWriter out, Database db, String[] campos, Operacao operacao) throws IOException {
+		super(out, db, campos, operacao);
 	}
 
 	@Override
 	public void insert() throws IOException {
 		boolean timeExiste = false;
 		for(Time time : db.times) {
-			if(time.getNome().equals(campos[2].toUpperCase())) {
+			if(time.getNome().equals(campos[2])) {
 				timeExiste = true;
 				break;
 			}
@@ -29,12 +29,12 @@ public class TimeController extends MessageController {
 		if(timeExiste == true) {
 			msg = "Time já cadastrado";
 		} else {
-			Time time = new Time(campos[2].toUpperCase());
-			time.setLiga(campos[3].toUpperCase());
+			Time time = new Time(campos[2]);
+			time.setLiga(campos[3]);
 			db.times.add(time);
 			msg = "Time cadastrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -42,19 +42,19 @@ public class TimeController extends MessageController {
 	public void update() throws IOException {
 		boolean timeExiste = false;
 		for(Time time : db.times) {
-			if(time.getNome().equals(campos[2].toUpperCase())) {
+			if(time.getNome().equals(campos[2])) {
 				timeExiste = true;
-				time.setNome(campos[2].toUpperCase());
-				time.setLiga(campos[3].toUpperCase());
+				time.setNome(campos[3]);
+				time.setLiga(campos[4]);
 				break;
 			}
 		}
 		if(timeExiste == true) {
-			msg = "Técnico atualizado com sucesso";
+			msg = "Time atualizado com sucesso";
 		} else {
-			msg = "Técnico não encontrado";
+			msg = "Time não encontrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -63,7 +63,7 @@ public class TimeController extends MessageController {
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
-				if(time.getNome().equals(campos[2].toUpperCase())) {
+				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					msg = time.toString();
 					for(Tecnico tecnico : time.getTecnicos()) {
@@ -81,7 +81,7 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -90,7 +90,7 @@ public class TimeController extends MessageController {
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
-				if(time.getNome().equals(campos[2].toUpperCase())) {
+				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					db.times.remove(time);
 					msg = "Time removido com sucesso";
@@ -103,7 +103,7 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -119,15 +119,16 @@ public class TimeController extends MessageController {
 				msg += "\n\t" + jogador;
 			}
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 	
+	@Override
 	public void add_jogador() throws IOException {
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
-				if(time.getNome().equals(campos[2].toUpperCase())) {
+				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					boolean cpfExiste = false;
 					if(db.jogadores.size() > 0) {
@@ -135,6 +136,7 @@ public class TimeController extends MessageController {
 							if(jogador.getCpf().equals(campos[3])) {
 								cpfExiste = true;
 								time.addJogador(jogador);
+								jogador.setTime(time);
 								msg = "Jogador adicionado ao time";
 								break;
 							}
@@ -154,15 +156,16 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 	
+	@Override
 	public void add_tecnico() throws IOException {
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
-				if(time.getNome().equals(campos[2].toUpperCase())) {
+				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					boolean cpfExiste = false;
 					if(db.tecnicos.size() > 0) {
@@ -170,6 +173,7 @@ public class TimeController extends MessageController {
 							if(tecnico.getCpf().equals(campos[3])) {
 								cpfExiste = true;
 								time.addTecnico(tecnico);
+								tecnico.setTime(time);
 								msg = "Técnico adicionado ao time";
 								break;
 							}
@@ -189,7 +193,7 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 }

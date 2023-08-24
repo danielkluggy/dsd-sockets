@@ -1,26 +1,23 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.io.PrintWriter;
 
 import Server.Model.Database;
 import Server.Model.Operacao;
 
 public abstract class MessageController {
 	
-	Socket conn;
+	PrintWriter out;
 	Database db;
 	String[] campos;
 	Operacao operacao;
-	OutputStream out;
 		
-	public MessageController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		this.conn = conn;
+	public MessageController(PrintWriter out, Database db, String[] campos, Operacao operacao) throws IOException {
+		this.out = out;
 		this.db = db;
 		this.campos = campos;
 		this.operacao = operacao;
-		this.out = conn.getOutputStream();
 	}
 
 	public void comando() throws IOException {		

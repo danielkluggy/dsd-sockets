@@ -1,7 +1,10 @@
 package Server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,7 +28,29 @@ public class Server {
 		Socket conn = null;
 		System.out.println("Servidor iniciado no IP " + InetAddress.getLocalHost().getHostAddress() + ":" + porta);
 		
-		while (true) {
+		try {
+			conn = server.accept();
+			String msg = null;
+			System.out.println("Conectado com: " + conn.getInetAddress().getHostAddress());
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+            
+            msg += in.readLine();
+            System.out.println(in.readLine());
+            
+
+		} catch (Exception e) {
+			System.out.println("Deu exception");
+            e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+				System.out.println("Conexão com " + conn.getInetAddress().getHostAddress() + " encerrada");
+			}
+		}
+		
+		
+		/*while (true) {
 			try {
 				conn = server.accept();
 				System.out.println("Conectado com: " + conn.getInetAddress().getHostAddress());
@@ -45,26 +70,26 @@ public class Server {
 					System.out.println("Conexão com " + conn.getInetAddress().getHostAddress() + " encerrada");
 				}
 			}
-		}
+		}*/
 	}
 	
-	private static void comando(Socket conn, Database db, String mensagem) throws IOException {
-		String[] campos = mensagem.split(";");
+	private static void comando(PrintWriter out, Database db, String mensagem) throws IOException {
+		String[] campos = mensagem.toUpperCase().split(";");
 		Operacao operacao = Operacao.valueOf(campos[0]);
 		Modelo modelo = Modelo.valueOf(campos[1]);
 		
 		switch (modelo) {
 		case JOGADOR:
 			//Usar um singleton pra criar uma única pessoa controller
-			JogadorController pessoa = new JogadorController(conn, db, campos, operacao);
+			JogadorController pessoa = new JogadorController(out, db, campos, operacao);
 			pessoa.comando();
 			break;
 		case TECNICO:
-			TecnicoController tecnico = new TecnicoController(conn, db, campos, operacao);
+			TecnicoController tecnico = new TecnicoController(out, db, campos, operacao);
 			tecnico.comando();
 			break;
 		case TIME:
-			TimeController time = new TimeController(conn, db, campos, operacao);
+			TimeController time = new TimeController(out, db, campos, operacao);
 			time.comando();
 		default:
 			break;

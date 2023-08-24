@@ -1,7 +1,7 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.io.PrintWriter;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -12,8 +12,8 @@ public class JogadorController extends MessageController {
 
 	String msg;
 	
-	public JogadorController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(conn, db, campos, operacao);
+	public JogadorController(PrintWriter out, Database db, String[] campos, Operacao operacao) throws IOException {
+		super(out, db, campos, operacao);
 	}
 
 	@Override
@@ -35,13 +35,14 @@ public class JogadorController extends MessageController {
 			msg = "Pessoa já cadastrada";
 		} else {
 			Jogador jogador = new Jogador(campos[2]);
-			jogador.setNome(campos[3].toUpperCase());
-			jogador.setEndereco(campos[4].toUpperCase());
-			jogador.setPosicao(campos[5].toUpperCase());
+			jogador.setNome(campos[3]);
+			jogador.setEndereco(campos[4]);
+			jogador.setPosicao(campos[5]);
 			db.jogadores.add(jogador);
 			msg = "Jogador cadastrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
+		out.println("end");
 		out.close();
 	}
 
@@ -51,9 +52,9 @@ public class JogadorController extends MessageController {
 		for(Jogador jogador : db.jogadores) {
 			if(jogador.getCpf().equals(campos[2])) {
 				cpfExiste = true;
-				jogador.setNome(campos[3].toUpperCase());
-				jogador.setEndereco(campos[4].toUpperCase());
-				jogador.setPosicao(campos[5].toUpperCase());
+				jogador.setNome(campos[3]);
+				jogador.setEndereco(campos[4]);
+				jogador.setPosicao(campos[5]);
 				break;
 			}
 		}
@@ -62,7 +63,7 @@ public class JogadorController extends MessageController {
 		} else {
 			msg = "Jogador não encontrado";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -83,7 +84,7 @@ public class JogadorController extends MessageController {
 		} else {
 			msg = "Sem jogadores cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -95,6 +96,9 @@ public class JogadorController extends MessageController {
 				if(jogador.getCpf().equals(campos[2])) {
 					cpfExiste = true;
 					db.jogadores.remove(jogador);
+					if(jogador.getTime() != null) {
+						jogador.getTime().removeJogador(jogador);
+					}
 					msg = "Jogador removido com sucesso";
 					break;
 				}
@@ -105,7 +109,7 @@ public class JogadorController extends MessageController {
 		} else {
 			msg = "Sem jogadores cadastrados";
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 
@@ -115,7 +119,7 @@ public class JogadorController extends MessageController {
 		for(Jogador jogador : db.jogadores) {
 			msg += "\n" + jogador.toString();
 		}
-		out.write(msg.getBytes());
+		out.println(msg);
 		out.close();
 	}
 }
