@@ -1,72 +1,79 @@
-package Client;
+	package Client;
 
-import java.io.IOException;
+	import javax.swing.JFrame;
+	import javax.swing.JPanel;
+	import java.awt.BorderLayout;
+	import javax.swing.JLabel;
+	import javax.swing.JTextField;
+	import java.awt.Dimension;
+	import javax.swing.SwingConstants;
 
-import Client.View.View;
+import Client.View.MainView;
 
-public class Client {
-	
-	public static void main (String[] args) throws IOException, InterruptedException {
+import javax.swing.JButton;
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+
+	@SuppressWarnings("serial")
+	public class Client extends JFrame {
+
+		private JPanel center;
+		private JLabel lblIp;
+		private JTextField tfIp;
+		private JLabel lblPorta;
+		private JTextField tfPorta;
+		private JButton btnConectar;
 		
-		View main = new View();		
-		main.setVisible(true);
+		public static void main(String[] args) {
+			Client client = new Client();
+			client.setVisible(true);
+		}
 		
-		/*List<String> msgs = new ArrayList<String>();
-		msgs.add("INSERT;JOGADOR;111;JOGADOR 1;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;JOGADOR;222;JOGADOR 22;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;JOGADOR;333;JOGADOR 3;RIO DO SUL;ARMADOR");
-		msgs.add("INSERT;TECNICO;444;TECNICO 1;RIO DO SUL;HEAD COACH");
-		msgs.add("INSERT;TECNICO;555;TECNICO 22;RIO DO SUL;HEAD COACH");
-		msgs.add("INSERT;TECNICO;666;TECNICO 3;RIO DO SUL;HEAD COACH");	
-		msgs.add("INSERT;TIME;TIME 1;NBA");
-		msgs.add("INSERT;TIME;TIME 22;NBA");
-		msgs.add("INSERT;TIME;TIME 3;NBA");
-		msgs.add("UPDATE;JOGADOR;222;JOGADOR 2;RIO DO SUL;ARMADOR");
-		msgs.add("UPDATE;TECNICO;555;TECNICO 2;RIO DO SUL;HEAD COACH");
-		msgs.add("UPDATE;TIME;TIME 22;TIME 2;NBA");
-		msgs.add("ADD_JOGADOR;TIME;TIME 1;111");
-		msgs.add("ADD_JOGADOR;TIME;TIME 2;222");
-		msgs.add("ADD_JOGADOR;TIME;TIME 3;333");
-		msgs.add("ADD_TECNICO;TIME;TIME 1;444");
-		msgs.add("ADD_TECNICO;TIME;TIME 2;555");
-		msgs.add("ADD_TECNICO;TIME;TIME 2;666");
-		msgs.add("LIST;JOGADOR");
-		msgs.add("LIST;TECNICO");
-		msgs.add("LIST;TIME");
-		msgs.add("GET;JOGADOR;222");
-		msgs.add("GET;TECNICO;555");
-		msgs.add("GET;TIME;TIME 2");		
-		msgs.add("DELETE;JOGADOR;333");
-		msgs.add("DELETE;TECNICO;666");
-		msgs.add("DELETE;TIME;TIME 3");
-		msgs.add("LIST;JOGADOR");
-		msgs.add("LIST;TECNICO");
-		msgs.add("LIST;TIME");
-		
-		for(int i = 0; i < msgs.size(); i++) {
+		public Client() {
+			initialize();
+		}
+
+		private void initialize() {
+			setResizable(false);
+			setBounds(100, 100, 200, 180);
+			setLocationRelativeTo(null);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			try (Socket conn = new Socket ("127.0.0.1", 80);) {
-				//System.out.println("Conectando");
-				OutputStream out = conn.getOutputStream();
-				
-				out.write(msgs.get(i).getBytes());
-				
-				InputStream in = conn.getInputStream();
-				byte[] dadosBrutos = new byte[1024];
-				int qtdBytesLidos = in.read(dadosBrutos);
-				String msgIn = null;
-				while(qtdBytesLidos >= 0) {
-					msgIn = new String (dadosBrutos, 0, qtdBytesLidos);
-					System.out.println(msgIn);
-					qtdBytesLidos = in.read(dadosBrutos);
+			center = new JPanel();
+			getContentPane().add(center, BorderLayout.CENTER);
+			
+			lblIp = new JLabel("IP:");
+			lblIp.setHorizontalAlignment(SwingConstants.CENTER);
+			lblIp.setPreferredSize(new Dimension(100, 20));
+			center.add(lblIp);
+			
+			tfIp = new JTextField();
+			tfIp.setColumns(15);
+			center.add(tfIp);
+			
+			lblPorta = new JLabel("Porta:");
+			lblPorta.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPorta.setPreferredSize(new Dimension(100, 20));
+			center.add(lblPorta);
+			
+			tfPorta = new JTextField();
+			tfPorta.setColumns(15);
+			center.add(tfPorta);
+			
+			btnConectar = new JButton("Consultar");
+			btnConectar.setPreferredSize(new Dimension(120, 30));
+			btnConectar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					conectar(e);
 				}
-				
-			} catch (UnknownHostException e) {
-				System.out.println("Host não encontrado");
-				e.printStackTrace();
-			}
-			
-		}*/
-	}
+			});
+			center.add(btnConectar);
+		}
+		
+		private void conectar(ActionEvent e) {
+			MainView view = new MainView(tfIp.getText(), Integer.parseInt(tfPorta.getText()));
+			view.setVisible(true);
+			this.setVisible(false);
+		}
 
-}
+	}

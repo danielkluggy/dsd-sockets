@@ -1,7 +1,7 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.net.Socket;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -12,8 +12,8 @@ public class JogadorController extends MessageController {
 
 	String msg;
 	
-	public JogadorController(PrintWriter out, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(out, db, campos, operacao);
+	public JogadorController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
+		super(conn, db, campos, operacao);
 	}
 
 	@Override
@@ -42,8 +42,6 @@ public class JogadorController extends MessageController {
 			msg = "Jogador cadastrado";
 		}
 		out.println(msg);
-		out.println("end");
-		out.close();
 	}
 
 	@Override

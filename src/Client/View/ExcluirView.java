@@ -24,7 +24,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 @SuppressWarnings("serial")
-public class AdicionarView extends JFrame {
+public class ExcluirView extends JFrame {
 
 	private MainView view;
 	
@@ -48,7 +48,7 @@ public class AdicionarView extends JFrame {
 	private JPanel console;
 	private JTextPane txtConsole;
 	
-	public AdicionarView(MainView view) {
+	public ExcluirView(MainView view) {
 		this.view = view;
 		initialize();
 	}
@@ -189,14 +189,7 @@ public class AdicionarView extends JFrame {
 			if (tfPosicao.getText().isEmpty())
 				msgErro += "\nPosição inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
-				msgErro += "\nCPF inválido!";
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
-			if (tfEndereco.getText().isEmpty())
-				msgErro += "\nEndereço inválido!";
-			if (tfPosicao.getText().isEmpty())
-				msgErro += "\nPosição inválida!";
+			
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 			
 		}

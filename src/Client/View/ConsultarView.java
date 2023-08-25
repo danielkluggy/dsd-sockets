@@ -10,6 +10,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
+
+import Client.SocketController;
+
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 import java.awt.Color;
@@ -23,7 +26,7 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class ConsultarView extends JFrame {
 
-	private View view;
+	private MainView view;
 	
 	private JPanel top;
 	private JComboBox<Modelo> cbSelect;
@@ -32,20 +35,12 @@ public class ConsultarView extends JFrame {
 	private JTextField tfCPF;
 	private JLabel lblNome;
 	private JTextField tfNome;
-	private JLabel lblEndereco;
-	private JTextField tfEndereco;
-	private JLabel lblPosicao;
-	private JTextField tfPosicao;
-	private JLabel lblEspecialidade;
-	private JTextField tfEspecialidade;
-	private JLabel lblLiga;
-	private JTextField tfLiga;
-	private JButton btnAdicionar;
+	private JButton btnConsultar;
 	private JButton btnCancelar;
 	private JPanel console;
 	private JTextPane txtConsole;
 	
-	public ConsultarView(View view) {
+	public ConsultarView(MainView view) {
 		this.view = view;
 		initialize();
 	}
@@ -98,55 +93,19 @@ public class ConsultarView extends JFrame {
 		campos.add(tfNome);
 		tfNome.setColumns(55);
 		
-		lblEndereco = new JLabel("Endereço:");
-		lblEndereco.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblEndereco.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblEndereco);
 		
-		tfEndereco = new JTextField();
-		tfEndereco.setColumns(55);
-		campos.add(tfEndereco);
-		
-		lblPosicao = new JLabel("Posição:");
-		lblPosicao.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblPosicao.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblPosicao);
-		
-		tfPosicao = new JTextField();
-		tfPosicao.setColumns(55);
-		campos.add(tfPosicao);
-		
-		lblEspecialidade = new JLabel("Especialidade:");
-		lblEspecialidade.setPreferredSize(new Dimension(100, 20));
-		lblEspecialidade.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblEspecialidade);
-		
-		tfEspecialidade = new JTextField();
-		tfEspecialidade.setColumns(55);
-		campos.add(tfEspecialidade);
-		
-		lblLiga = new JLabel("Liga:");
-		lblLiga.setPreferredSize(new Dimension(100, 20));
-		lblLiga.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblLiga);
-		
-		tfLiga = new JTextField();
-		tfLiga.setColumns(55);
-		campos.add(tfLiga);
-		
-		btnAdicionar = new JButton("Adicionar");
-		btnAdicionar.setPreferredSize(new Dimension(150, 30));
-		btnAdicionar.addActionListener(new ActionListener() {
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setPreferredSize(new Dimension(150, 30));
+		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					salvar(e);
+					consultar(e);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
-		campos.add(btnAdicionar);
+		campos.add(btnConsultar);
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(150, 30));
@@ -173,20 +132,15 @@ public class ConsultarView extends JFrame {
 		
 	}
 	
-	private void salvar(ActionEvent e) throws IOException {
+	private void consultar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
-		String msgEnvio = "INSERT;";
+		String msgEnvio = "GET;";
 		if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
-			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
+			if (!tfCPF.getText().isEmpty() && !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
-			if (tfEndereco.getText().isEmpty())
-				msgErro += "\nEndereço inválido!";
-			if (tfPosicao.getText().isEmpty())
-				msgErro += "\nPosição inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			
+			if (!tfCPF.getText().matches("[0-9]+"))
+				msgErro += "\nCPF inválido!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 			
 		}
@@ -194,12 +148,12 @@ public class ConsultarView extends JFrame {
 			mensagemErro(msgErro);
 		} else {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
-			msgEnvio += tfCPF.getText() + ";";
-			msgEnvio += tfNome.getText() + ";";
-			msgEnvio += tfEndereco.getText() + ";";
-			msgEnvio += tfPosicao.getText();
-			mensagemErro(msgEnvio);
-			view.socket(msgEnvio);
+			if(tfCPF.getText() != null)
+				msgEnvio += tfCPF.getText() + ";";
+			SocketController socket = new SocketController(view.getIp(), view.getPorta());
+			socket.msgOut(msgEnvio);
+			txtConsole.setText(socket.msgIn());
+			
 		}
 	}
 	
@@ -215,19 +169,7 @@ public class ConsultarView extends JFrame {
 		tfNome.setVisible(false);
 		tfNome.setText("");
 		lblNome.setVisible(false);
-		tfEndereco.setVisible(false);
-		tfEndereco.setText("");
-		lblEndereco.setVisible(false);
-		tfPosicao.setVisible(false);
-		tfPosicao.setText("");
-		lblPosicao.setVisible(false);
-		tfEspecialidade.setVisible(false);
-		tfEspecialidade.setText("");
-		lblEspecialidade.setVisible(false);
-		tfLiga.setVisible(false);
-		tfLiga.setText("");
-		lblLiga.setVisible(false);
-		btnAdicionar.setVisible(false);
+		btnConsultar.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
 	}
@@ -244,35 +186,21 @@ public class ConsultarView extends JFrame {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfEndereco.setVisible(true);
-			lblEndereco.setVisible(true);
-			tfPosicao.setVisible(true);
-			lblPosicao.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnConsultar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfEndereco.setVisible(true);
-			lblEndereco.setVisible(true);
-			tfEspecialidade.setVisible(true);
-			lblEspecialidade.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnConsultar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 			limpar();
 			tfNome.setVisible(true);
 			lblNome.setVisible(true);
-			tfLiga.setVisible(true);
-			lblLiga.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnConsultar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		}

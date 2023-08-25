@@ -28,52 +28,28 @@ public class Server {
 		Socket conn = null;
 		System.out.println("Servidor iniciado no IP " + InetAddress.getLocalHost().getHostAddress() + ":" + porta);
 		
-		try {
-			conn = server.accept();
-			String msg = null;
-			System.out.println("Conectado com: " + conn.getInetAddress().getHostAddress());
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-            
-            msg += in.readLine();
-            System.out.println(in.readLine());
-            
-
-		} catch (Exception e) {
-			System.out.println("Deu exception");
-            e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				conn.close();
-				System.out.println("Conexão com " + conn.getInetAddress().getHostAddress() + " encerrada");
-			}
-		}
-		
-		
-		/*while (true) {
+		while (true) {
 			try {
 				conn = server.accept();
+				String msg;
 				System.out.println("Conectado com: " + conn.getInetAddress().getHostAddress());
-				InputStream in = conn.getInputStream();
-				byte[] dadosBrutos = new byte[1024];
-				int qtdBytesLidos = in.read(dadosBrutos);
-				String msg = new String (dadosBrutos, 0, qtdBytesLidos);
-				System.out.println(msg);
-				
-				comando(conn, db, msg);
+	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	            
+	            msg = in.readLine();
+	            comando(conn, db, msg);
 			} catch (Exception e) {
-                System.out.println("Exception");
-                e.printStackTrace();
+				System.out.println("Deu exception");
+	            e.printStackTrace();
 			} finally {
 				if (conn != null) {
 					conn.close();
 					System.out.println("Conexão com " + conn.getInetAddress().getHostAddress() + " encerrada");
 				}
 			}
-		}*/
+		}
 	}
 	
-	private static void comando(PrintWriter out, Database db, String mensagem) throws IOException {
+	private static void comando(Socket conn, Database db, String mensagem) throws IOException {
 		String[] campos = mensagem.toUpperCase().split(";");
 		Operacao operacao = Operacao.valueOf(campos[0]);
 		Modelo modelo = Modelo.valueOf(campos[1]);
@@ -81,15 +57,15 @@ public class Server {
 		switch (modelo) {
 		case JOGADOR:
 			//Usar um singleton pra criar uma única pessoa controller
-			JogadorController pessoa = new JogadorController(out, db, campos, operacao);
+			JogadorController pessoa = new JogadorController(conn, db, campos, operacao);
 			pessoa.comando();
 			break;
 		case TECNICO:
-			TecnicoController tecnico = new TecnicoController(out, db, campos, operacao);
+			TecnicoController tecnico = new TecnicoController(conn, db, campos, operacao);
 			tecnico.comando();
 			break;
 		case TIME:
-			TimeController time = new TimeController(out, db, campos, operacao);
+			TimeController time = new TimeController(conn, db, campos, operacao);
 			time.comando();
 		default:
 			break;
