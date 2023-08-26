@@ -1,7 +1,6 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -11,14 +10,13 @@ import Server.Model.Time;
 
 public class TimeController extends MessageController {
 
-	String msg;
-	
-	public TimeController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(conn, db, campos, operacao);
+	public TimeController(Database db, String[] campos, Operacao operacao) throws IOException {
+		super(db, campos, operacao);
 	}
 
 	@Override
 	public void insert() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		for(Time time : db.times) {
 			if(time.getNome().equals(campos[2])) {
@@ -34,18 +32,18 @@ public class TimeController extends MessageController {
 			db.times.add(time);
 			msg = "Time cadastrado";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void update() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		for(Time time : db.times) {
 			if(time.getNome().equals(campos[2])) {
 				timeExiste = true;
-				time.setNome(campos[3]);
-				time.setLiga(campos[4]);
+				time.setNome(campos[2]);
+				time.setLiga(campos[3]);
 				break;
 			}
 		}
@@ -54,12 +52,12 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Time não encontrado";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void get() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
@@ -81,12 +79,12 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void delete() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
@@ -103,28 +101,28 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void list() throws IOException {
+		String msg = "";
 		msg = String.valueOf(db.times.size());
 		for(Time time : db.times) {
-			msg += "\n" + time.toString();
+			msg += "\n -> " + time.toString();
 			for(Tecnico tecnico : time.getTecnicos()) {
-				msg += "\n\t" + tecnico;
+				msg += "\n\t -> " + tecnico;
 			}
 			for(Jogador jogador : time.getJogadores()) {
-				msg += "\n\t" + jogador;
+				msg += "\n\t -> " + jogador;
 			}
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 	
 	@Override
 	public void add_jogador() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
@@ -156,12 +154,12 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 	
 	@Override
 	public void add_tecnico() throws IOException {
+		String msg = "";
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
 			for(Time time : db.times) {
@@ -193,7 +191,6 @@ public class TimeController extends MessageController {
 		} else {
 			msg = "Sem times cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 }

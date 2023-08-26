@@ -4,15 +4,18 @@
 	import javax.swing.JPanel;
 	import java.awt.BorderLayout;
 	import javax.swing.JLabel;
+	import javax.swing.JOptionPane;
 	import javax.swing.JTextField;
 	import java.awt.Dimension;
 	import javax.swing.SwingConstants;
 
-import Client.View.MainView;
+	import Client.View.MainView;
 
-import javax.swing.JButton;
+	import javax.swing.JButton;
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
+	import java.io.IOException;
+	import java.net.Socket;
 
 	@SuppressWarnings("serial")
 	public class Client extends JFrame {
@@ -71,9 +74,17 @@ import javax.swing.JButton;
 		}
 		
 		private void conectar(ActionEvent e) {
-			MainView view = new MainView(tfIp.getText(), Integer.parseInt(tfPorta.getText()));
-			view.setVisible(true);
-			this.setVisible(false);
+			try {
+				Socket conn = new Socket (tfIp.getText(), Integer.parseInt(tfPorta.getText()));
+				MainView view = new MainView(tfIp.getText(), Integer.parseInt(tfPorta.getText()));
+				conn.close();
+				view.setVisible(true);
+				this.setVisible(false);
+			} catch (IOException ex) {
+				System.out.println("Deu exception");
+				JOptionPane.showMessageDialog(null, "Servidor incorreto!", "Erro", JOptionPane.ERROR_MESSAGE);
+	            ex.printStackTrace();
+			}
 		}
 
 	}

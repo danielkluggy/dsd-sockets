@@ -7,23 +7,21 @@ import java.net.Socket;
 import Server.Model.Database;
 import Server.Model.Operacao;
 
-public abstract class MessageController {
+public class MessageController {
 	
-	Socket conn;
 	Database db;
 	String[] campos;
 	Operacao operacao;
-	PrintWriter out;
+	Socket conn;
 		
-	public MessageController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		this.conn = conn;
+	public MessageController(Database db, String[] campos, Operacao operacao) throws IOException {
 		this.db = db;
 		this.campos = campos;
 		this.operacao = operacao;
-		this.out = new PrintWriter(conn.getOutputStream(), true);
 	}
 
-	public void comando() throws IOException {		
+	public void comando(Socket conn) throws IOException {
+		this.conn = conn;
 		switch (this.operacao) {
 		case INSERT:
 			insert();
@@ -48,13 +46,17 @@ public abstract class MessageController {
 			break;
 		}
 	}
-		
-	public abstract void insert() throws IOException;
-	public abstract void update() throws IOException;
-	public abstract void get() throws IOException;
-	public abstract void delete() throws IOException;
-	public abstract void list() throws IOException;
 	
+	protected void msgOut(String msg) throws IOException {
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+		out.println(msg);
+	}
+		
+	public void insert() throws IOException {}
+	public void update() throws IOException {}
+	public void get() throws IOException {}
+	public void delete() throws IOException {}
+	public void list() throws IOException {}
 	public void add_tecnico() throws IOException {}
 	public void add_jogador() throws IOException {}
 		

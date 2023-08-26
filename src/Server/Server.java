@@ -1,75 +1,75 @@
-package Server;
+	package Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+	import javax.swing.JFrame;
+	import javax.swing.JPanel;
+	import java.awt.BorderLayout;
+	import javax.swing.JLabel;
+	import javax.swing.JOptionPane;
+	import javax.swing.JTextField;
+	import java.awt.Dimension;
+	import javax.swing.SwingConstants;
+	import javax.swing.JButton;
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
 
-import Server.Controller.JogadorController;
-import Server.Controller.TecnicoController;
-import Server.Controller.TimeController;
-import Server.Model.Database;
-import Server.Model.Modelo;
-import Server.Model.Operacao;
+	@SuppressWarnings("serial")
+	public class Server extends JFrame {
 
-public class Server {
-
-	public static void main(String[] args) throws IOException {
-		final int porta = 80;
-		Database db = new Database();
-		@SuppressWarnings("resource")
-		ServerSocket server = new ServerSocket(porta);
-		server.setReuseAddress(true);
+		private JPanel center;
+		private JLabel lblPorta;
+		private JTextField tfPorta;
+		private JButton btnConectar;
 		
-		Socket conn = null;
-		System.out.println("Servidor iniciado no IP " + InetAddress.getLocalHost().getHostAddress() + ":" + porta);
-		
-		while (true) {
-			try {
-				conn = server.accept();
-				String msg;
-				System.out.println("Conectado com: " + conn.getInetAddress().getHostAddress());
-	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-	            
-	            msg = in.readLine();
-	            comando(conn, db, msg);
-			} catch (Exception e) {
-				System.out.println("Deu exception");
-	            e.printStackTrace();
-			} finally {
-				if (conn != null) {
-					conn.close();
-					System.out.println("Conexão com " + conn.getInetAddress().getHostAddress() + " encerrada");
+		public static void main(String[] args) {
+			Server server = new Server();
+			server.setVisible(true);
+		}
+				
+		public Server() {
+			initialize();
+		}
+
+		private void initialize() {
+			setResizable(false);
+			setBounds(100, 100, 200, 150);
+			setLocationRelativeTo(null);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			center = new JPanel();
+			getContentPane().add(center, BorderLayout.CENTER);
+			
+			lblPorta = new JLabel("Porta:");
+			lblPorta.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPorta.setPreferredSize(new Dimension(100, 20));
+			center.add(lblPorta);
+			
+			tfPorta = new JTextField();
+			tfPorta.setColumns(15);
+			center.add(tfPorta);
+			
+			btnConectar = new JButton("Consultar");
+			btnConectar.setPreferredSize(new Dimension(120, 30));
+			btnConectar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					conectar(e);
 				}
-			}
+			});
+			center.add(btnConectar);
 		}
-	}
-	
-	private static void comando(Socket conn, Database db, String mensagem) throws IOException {
-		String[] campos = mensagem.toUpperCase().split(";");
-		Operacao operacao = Operacao.valueOf(campos[0]);
-		Modelo modelo = Modelo.valueOf(campos[1]);
 		
-		switch (modelo) {
-		case JOGADOR:
-			//Usar um singleton pra criar uma única pessoa controller
-			JogadorController pessoa = new JogadorController(conn, db, campos, operacao);
-			pessoa.comando();
-			break;
-		case TECNICO:
-			TecnicoController tecnico = new TecnicoController(conn, db, campos, operacao);
-			tecnico.comando();
-			break;
-		case TIME:
-			TimeController time = new TimeController(conn, db, campos, operacao);
-			time.comando();
-		default:
-			break;
+		private void conectar(ActionEvent e) {
+			try {
+				@SuppressWarnings("unused")
+				ServerRunning server = new ServerRunning(Integer.parseInt(tfPorta.getText()));
+				this.setVisible(false); 
+				ServerRunning.main(null);
+			} catch (Exception ex) {
+				System.out.println("Deu exception");
+				JOptionPane.showMessageDialog(null, "Porta incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
+	            ex.printStackTrace();
+			}
+			
+			
 		}
-	}
 
-}
+	}

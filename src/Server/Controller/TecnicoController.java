@@ -1,7 +1,6 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import Server.Model.Database;
 import Server.Model.Jogador;
@@ -10,14 +9,13 @@ import Server.Model.Tecnico;
 
 public class TecnicoController extends MessageController {
 
-	String msg;
-	
-	public TecnicoController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		super(conn, db, campos, operacao);
+	public TecnicoController(Database db, String[] campos, Operacao operacao) throws IOException {
+		super(db, campos, operacao);
 	}
 
 	@Override
 	public void insert() throws IOException {
+		String msg = "";
 		boolean cpfExiste = false;
 		for(Tecnico tecnico : db.tecnicos) {
 			if(tecnico.getCpf().equals(campos[2])) {
@@ -41,12 +39,12 @@ public class TecnicoController extends MessageController {
 			db.tecnicos.add(tecnico);
 			msg = "Técnico cadastrado";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void update() throws IOException {
+		String msg = "";
 		boolean cpfExiste = false;
 		for(Tecnico tecnico : db.tecnicos) {
 			if(tecnico.getCpf().equals(campos[2])) {
@@ -62,12 +60,12 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Técnico não encontrado";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void get() throws IOException {
+		String msg = "";
 		boolean cpfExiste = false;
 		if(db.tecnicos.size() > 0) {
 			for(Tecnico tecnico : db.tecnicos) {
@@ -83,12 +81,12 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Sem técnicos cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void delete() throws IOException {
+		String msg = "";
 		boolean cpfExiste = false;
 		if(db.tecnicos.size() > 0) {
 			for(Tecnico tecnico : db.tecnicos) {
@@ -108,17 +106,17 @@ public class TecnicoController extends MessageController {
 		} else {
 			msg = "Sem técnicos cadastrados";
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
 
 	@Override
 	public void list() throws IOException {
+		String msg = "";
 		msg = String.valueOf(db.tecnicos.size());
 		for(Tecnico tecnico : db.tecnicos) {
-			msg += "\n" + tecnico.toString();
+			msg += "\n -> " + tecnico.toString();
 		}
-		out.println(msg);
-		out.close();
+		msgOut(msg);
 	}
+	
 }

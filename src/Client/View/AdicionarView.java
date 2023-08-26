@@ -195,19 +195,32 @@ public class AdicionarView extends JFrame {
 				msgErro += "\nNome inválido!";
 			if (tfEndereco.getText().isEmpty())
 				msgErro += "\nEndereço inválido!";
-			if (tfPosicao.getText().isEmpty())
-				msgErro += "\nPosição inválida!";
+			if (tfEspecialidade.getText().isEmpty())
+				msgErro += "\nEspecialidade inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			
+			if (tfNome.getText().isEmpty())
+				msgErro += "\nNome inválido!";
+			if (tfLiga.getText().isEmpty())
+				msgErro += "\nLiga inválido!";
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
-			msgEnvio += tfCPF.getText() + ";";
-			msgEnvio += tfNome.getText() + ";";
-			msgEnvio += tfEndereco.getText() + ";";
-			msgEnvio += tfPosicao.getText();
+			if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+				msgEnvio += tfCPF.getText() + ";";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfEndereco.getText() + ";";
+				msgEnvio += tfPosicao.getText();
+			} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
+				msgEnvio += tfCPF.getText() + ";";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfEndereco.getText() + ";";
+				msgEnvio += tfEspecialidade.getText();
+			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfLiga.getText();
+			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
 			txtConsole.setText(socket.msgIn());
@@ -242,6 +255,7 @@ public class AdicionarView extends JFrame {
 		btnAdicionar.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
+		txtConsole.setText("");
 	}
 	
 	private void mensagemErro(String msg) {

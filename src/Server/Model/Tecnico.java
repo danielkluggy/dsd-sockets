@@ -18,7 +18,7 @@ public class Tecnico extends Pessoa {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";tecnico;" + especialidade;
+		return super.toString() + ";TECNICO;" + especialidade;
 	}
 	
 	

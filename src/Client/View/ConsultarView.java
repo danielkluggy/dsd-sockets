@@ -2,6 +2,8 @@ package Client.View;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import java.awt.BorderLayout;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -118,7 +120,7 @@ public class ConsultarView extends JFrame {
 		
 		console = new JPanel();
 		getContentPane().add(console, BorderLayout.SOUTH);
-		
+				
 		txtConsole = new JTextPane();
 		txtConsole.setEnabled(false);
 		txtConsole.setEditable(false);
@@ -126,7 +128,9 @@ public class ConsultarView extends JFrame {
 		txtConsole.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		txtConsole.setBackground(new Color(0, 0, 51));
 		txtConsole.setPreferredSize(new Dimension(750, 125));
-		console.add(txtConsole);
+		
+		JScrollPane scroll = new JScrollPane(txtConsole);
+		console.add(scroll);
 		
 		limpar();
 		
@@ -134,26 +138,33 @@ public class ConsultarView extends JFrame {
 	
 	private void consultar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
-		String msgEnvio = "GET;";
-		if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+		String msgEnvio = "";
+		if (cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
 			if (!tfCPF.getText().isEmpty() && !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			if (!tfCPF.getText().matches("[0-9]+"))
-				msgErro += "\nCPF inválido!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			
 		}
-		if(msgErro != "Erro:") {
+		if (msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
-			msgEnvio += cbSelect.getSelectedItem() + ";";
-			if(tfCPF.getText() != null)
-				msgEnvio += tfCPF.getText() + ";";
+			if (cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+				if(tfCPF.getText().isEmpty()) {
+					msgEnvio = "LIST;" + cbSelect.getSelectedItem();
+				} else {
+					msgEnvio = "GET;" + cbSelect.getSelectedItem() + ";";
+					msgEnvio += tfCPF.getText();
+				}
+			} else if (cbSelect.getSelectedItem() == Modelo.TIME) {
+				if(tfNome.getText().isEmpty()) {
+					msgEnvio = "LIST;" + cbSelect.getSelectedItem();
+				} else {
+					msgEnvio = "GET;" + cbSelect.getSelectedItem() + ";";
+					msgEnvio += tfNome.getText();
+				}
+			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
+			System.out.println(msgEnvio);
 			txtConsole.setText(socket.msgIn());
-			
 		}
 	}
 	

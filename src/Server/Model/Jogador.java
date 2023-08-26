@@ -18,7 +18,7 @@ public class Jogador extends Pessoa {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";jogador;" + posicao;
+		return super.toString() + ";JOGADOR;" + posicao;
 	}
 	
 	

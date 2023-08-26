@@ -58,7 +58,7 @@ public class Time {
 
 	@Override
 	public String toString() {
-		return nome + ";" + liga + ";tecnicos=" + tecnicos.size() + ";jogadores=" + jogadores.size();
+		return nome + ";" + liga + ";TECNICOS=" + tecnicos.size() + ";JOGADORES=" + jogadores.size();
 	}
 	
 	

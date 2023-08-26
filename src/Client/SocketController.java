@@ -5,11 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class SocketController {
 	
-	String msgIn;
+	String msgIn = "";
 	PrintWriter out;
 	BufferedReader in;
 	Socket conn;
@@ -27,9 +26,13 @@ public class SocketController {
 		}
 	}
 	
-	public void msgOut(String msg) throws IOException {
+	public void msgOut(String msg) throws IOException {		
 		out.println(msg);
-		msgIn = in.readLine();
+		String valida = in.readLine();
+		while(valida != null) {
+			msgIn += valida + "\n";
+			valida = in.readLine();
+		}
 		conn.close();
 	}
 
