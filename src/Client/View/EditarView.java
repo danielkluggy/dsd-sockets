@@ -43,7 +43,7 @@ public class EditarView extends JFrame {
 	private JTextField tfEspecialidade;
 	private JLabel lblLiga;
 	private JTextField tfLiga;
-	private JButton btnAdicionar;
+	private JButton btnEditar;
 	private JButton btnCancelar;
 	private JPanel console;
 	private JTextPane txtConsole;
@@ -137,9 +137,9 @@ public class EditarView extends JFrame {
 		tfLiga.setColumns(55);
 		campos.add(tfLiga);
 		
-		btnAdicionar = new JButton("Adicionar");
-		btnAdicionar.setPreferredSize(new Dimension(150, 30));
-		btnAdicionar.addActionListener(new ActionListener() {
+		btnEditar = new JButton("Editar");
+		btnEditar.setPreferredSize(new Dimension(150, 30));
+		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					salvar(e);
@@ -149,7 +149,7 @@ public class EditarView extends JFrame {
 				}
 			}
 		});
-		campos.add(btnAdicionar);
+		campos.add(btnEditar);
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(150, 30));
@@ -178,7 +178,7 @@ public class EditarView extends JFrame {
 	
 	private void salvar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
-		String msgEnvio = "INSERT;";
+		String msgEnvio = "UPDATE;";
 		if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
@@ -189,18 +189,38 @@ public class EditarView extends JFrame {
 			if (tfPosicao.getText().isEmpty())
 				msgErro += "\nPosição inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			
+			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
+				msgErro += "\nCPF inválido!";
+			if (tfNome.getText().isEmpty())
+				msgErro += "\nNome inválido!";
+			if (tfEndereco.getText().isEmpty())
+				msgErro += "\nEndereço inválido!";
+			if (tfEspecialidade.getText().isEmpty())
+				msgErro += "\nEspecialidade inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			
+			if (tfNome.getText().isEmpty())
+				msgErro += "\nNome inválido!";
+			if (tfLiga.getText().isEmpty())
+				msgErro += "\nLiga inválida!";
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
-			msgEnvio += tfCPF.getText() + ";";
-			msgEnvio += tfNome.getText() + ";";
-			msgEnvio += tfEndereco.getText() + ";";
-			msgEnvio += tfPosicao.getText();
+			if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+				msgEnvio += tfCPF.getText() + ";";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfEndereco.getText() + ";";
+				msgEnvio += tfPosicao.getText();
+			} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
+				msgEnvio += tfCPF.getText() + ";";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfEndereco.getText() + ";";
+				msgEnvio += tfEspecialidade.getText();
+			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfLiga.getText();
+			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
 			txtConsole.setText(socket.msgIn());
@@ -232,9 +252,10 @@ public class EditarView extends JFrame {
 		tfLiga.setVisible(false);
 		tfLiga.setText("");
 		lblLiga.setVisible(false);
-		btnAdicionar.setVisible(false);
+		btnEditar.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
+		txtConsole.setText("");
 	}
 	
 	private void mensagemErro(String msg) {
@@ -255,7 +276,7 @@ public class EditarView extends JFrame {
 			lblEndereco.setVisible(true);
 			tfPosicao.setVisible(true);
 			lblPosicao.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnEditar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
@@ -268,7 +289,7 @@ public class EditarView extends JFrame {
 			lblEndereco.setVisible(true);
 			tfEspecialidade.setVisible(true);
 			lblEspecialidade.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnEditar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
@@ -277,7 +298,7 @@ public class EditarView extends JFrame {
 			lblNome.setVisible(true);
 			tfLiga.setVisible(true);
 			lblLiga.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnEditar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		}

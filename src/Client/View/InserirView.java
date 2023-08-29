@@ -31,19 +31,11 @@ public class InserirView extends JFrame {
 	private JPanel top;
 	private JComboBox<Modelo> cbSelect;
 	private JPanel campos;
-	private JLabel lblCPF;
-	private JTextField tfCPF;
 	private JLabel lblNome;
 	private JTextField tfNome;
-	private JLabel lblEndereco;
-	private JTextField tfEndereco;
-	private JLabel lblPosicao;
-	private JTextField tfPosicao;
-	private JLabel lblEspecialidade;
-	private JTextField tfEspecialidade;
-	private JLabel lblLiga;
-	private JTextField tfLiga;
-	private JButton btnAdicionar;
+	private JLabel lblCPF;
+	private JTextField tfCPF;
+	private JButton btnInserir;
 	private JButton btnCancelar;
 	private JPanel console;
 	private JTextPane txtConsole;
@@ -68,11 +60,23 @@ public class InserirView extends JFrame {
 		});
 		
 		top = new JPanel();
+		top.setPreferredSize(new Dimension(10, 70));
 		getContentPane().add(top, BorderLayout.NORTH);
+		
+		lblNome = new JLabel("Nome do Time:");
+		lblNome.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblNome.setPreferredSize(new Dimension(100, 20));
+		top.add(lblNome);
+		
+		tfNome = new JTextField();
+		tfNome.setColumns(55);
+		top.add(tfNome);
+		
 		cbSelect = new JComboBox<Modelo>();
 		cbSelect.setPreferredSize(new Dimension(300, 25));
 		cbSelect.setMaximumRowCount(4);
 		cbSelect.setModel(new DefaultComboBoxModel<Modelo>(Modelo.values()));
+		cbSelect.removeItemAt(3);
 		cbSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectModel(e);
@@ -91,55 +95,10 @@ public class InserirView extends JFrame {
 		tfCPF = new JTextField();
 		campos.add(tfCPF);
 		tfCPF.setColumns(55);
-		
-		lblNome = new JLabel("Nome:");
-		lblNome.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNome.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblNome);
-		
-		tfNome = new JTextField();
-		campos.add(tfNome);
-		tfNome.setColumns(55);
-		
-		lblEndereco = new JLabel("Endereço:");
-		lblEndereco.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblEndereco.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblEndereco);
-		
-		tfEndereco = new JTextField();
-		tfEndereco.setColumns(55);
-		campos.add(tfEndereco);
-		
-		lblPosicao = new JLabel("Posição:");
-		lblPosicao.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblPosicao.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblPosicao);
-		
-		tfPosicao = new JTextField();
-		tfPosicao.setColumns(55);
-		campos.add(tfPosicao);
-		
-		lblEspecialidade = new JLabel("Especialidade:");
-		lblEspecialidade.setPreferredSize(new Dimension(100, 20));
-		lblEspecialidade.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblEspecialidade);
-		
-		tfEspecialidade = new JTextField();
-		tfEspecialidade.setColumns(55);
-		campos.add(tfEspecialidade);
-		
-		lblLiga = new JLabel("Liga:");
-		lblLiga.setPreferredSize(new Dimension(100, 20));
-		lblLiga.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblLiga);
-		
-		tfLiga = new JTextField();
-		tfLiga.setColumns(55);
-		campos.add(tfLiga);
-		
-		btnAdicionar = new JButton("Adicionar");
-		btnAdicionar.setPreferredSize(new Dimension(150, 30));
-		btnAdicionar.addActionListener(new ActionListener() {
+				
+		btnInserir = new JButton("Inserir");
+		btnInserir.setPreferredSize(new Dimension(150, 30));
+		btnInserir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					salvar(e);
@@ -149,7 +108,7 @@ public class InserirView extends JFrame {
 				}
 			}
 		});
-		campos.add(btnAdicionar);
+		campos.add(btnInserir);
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(150, 30));
@@ -178,29 +137,25 @@ public class InserirView extends JFrame {
 	
 	private void salvar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
-		String msgEnvio = "INSERT;";
-		if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+		String msgEnvio = "ADD_";
+		if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+			if (tfNome.getText().isEmpty())
+				msgErro += "\nNome do time inválido!";
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
-			if (tfEndereco.getText().isEmpty())
-				msgErro += "\nEndereço inválido!";
-			if (tfPosicao.getText().isEmpty())
-				msgErro += "\nPosição inválida!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
-			msgEnvio += cbSelect.getSelectedItem() + ";";
-			msgEnvio += tfCPF.getText() + ";";
-			msgEnvio += tfNome.getText() + ";";
-			msgEnvio += tfEndereco.getText() + ";";
-			msgEnvio += tfPosicao.getText();
+			if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+				msgEnvio += cbSelect.getSelectedItem() + ";TIME;";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfCPF.getText();
+			} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
+				msgEnvio += cbSelect.getSelectedItem() + ";TIME;";
+				msgEnvio += tfNome.getText() + ";";
+				msgEnvio += tfCPF.getText();
+			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
 			txtConsole.setText(socket.msgIn());
@@ -217,24 +172,10 @@ public class InserirView extends JFrame {
 		tfCPF.setVisible(false);
 		tfCPF.setText("");
 		lblCPF.setVisible(false);
-		tfNome.setVisible(false);
-		tfNome.setText("");
-		lblNome.setVisible(false);
-		tfEndereco.setVisible(false);
-		tfEndereco.setText("");
-		lblEndereco.setVisible(false);
-		tfPosicao.setVisible(false);
-		tfPosicao.setText("");
-		lblPosicao.setVisible(false);
-		tfEspecialidade.setVisible(false);
-		tfEspecialidade.setText("");
-		lblEspecialidade.setVisible(false);
-		tfLiga.setVisible(false);
-		tfLiga.setText("");
-		lblLiga.setVisible(false);
-		btnAdicionar.setVisible(false);
+		btnInserir.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
+		txtConsole.setText("");
 	}
 	
 	private void mensagemErro(String msg) {
@@ -245,39 +186,12 @@ public class InserirView extends JFrame {
 	private void selectModel(ActionEvent e) {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+			tfNome.setText("");
+		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfEndereco.setVisible(true);
-			lblEndereco.setVisible(true);
-			tfPosicao.setVisible(true);
-			lblPosicao.setVisible(true);
-			btnAdicionar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			limpar();
-			tfCPF.setVisible(true);
-			lblCPF.setVisible(true);
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfEndereco.setVisible(true);
-			lblEndereco.setVisible(true);
-			tfEspecialidade.setVisible(true);
-			lblEspecialidade.setVisible(true);
-			btnAdicionar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			limpar();
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfLiga.setVisible(true);
-			lblLiga.setVisible(true);
-			btnAdicionar.setVisible(true);
+			btnInserir.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);
 		}

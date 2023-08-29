@@ -193,14 +193,7 @@ public class ConsultarView extends JFrame {
 	private void selectModel(ActionEvent e) {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
-			limpar();
-			tfCPF.setVisible(true);
-			lblCPF.setVisible(true);
-			btnConsultar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);

@@ -90,6 +90,12 @@ public class TimeController extends MessageController {
 			for(Time time : db.times) {
 				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
+					for(Jogador jogador : db.times.get(db.times.indexOf(time)).getJogadores()) {
+						jogador.setTime(null);
+					}
+					for(Tecnico tecnico : db.times.get(db.times.indexOf(time)).getTecnicos()) {
+						tecnico.setTime(null);
+					}
 					db.times.remove(time);
 					msg = "Time removido com sucesso";
 					break;
@@ -132,11 +138,17 @@ public class TimeController extends MessageController {
 					if(db.jogadores.size() > 0) {
 						for(Jogador jogador : db.jogadores) {
 							if(jogador.getCpf().equals(campos[3])) {
-								cpfExiste = true;
-								time.addJogador(jogador);
-								jogador.setTime(time);
-								msg = "Jogador adicionado ao time";
-								break;
+								if (jogador.getTime() == null) {
+									cpfExiste = true;
+									time.addJogador(jogador);
+									jogador.setTime(time);
+									msg = "Jogador adicionado ao time";
+									break;
+								} else {
+									cpfExiste = true;
+									msg = "Jogador já possui time";
+									break;
+								}
 							}
 						}
 						if(cpfExiste == false) {
@@ -169,11 +181,17 @@ public class TimeController extends MessageController {
 					if(db.tecnicos.size() > 0) {
 						for(Tecnico tecnico : db.tecnicos) {
 							if(tecnico.getCpf().equals(campos[3])) {
-								cpfExiste = true;
-								time.addTecnico(tecnico);
-								tecnico.setTime(time);
-								msg = "Técnico adicionado ao time";
-								break;
+								if (tecnico.getTime() == null) {
+									cpfExiste = true;
+									time.addTecnico(tecnico);
+									tecnico.setTime(time);
+									msg = "Técnico adicionado ao time";
+									break;
+								} else {
+									cpfExiste = true;
+									msg = "Técnico já possui time";
+									break;
+								}
 							}
 						}
 						if(cpfExiste == false) {

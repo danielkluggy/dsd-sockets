@@ -201,7 +201,7 @@ public class AdicionarView extends JFrame {
 			if (tfNome.getText().isEmpty())
 				msgErro += "\nNome inválido!";
 			if (tfLiga.getText().isEmpty())
-				msgErro += "\nLiga inválido!";
+				msgErro += "\nLiga inválida!";
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
