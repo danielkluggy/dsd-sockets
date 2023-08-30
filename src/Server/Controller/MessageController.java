@@ -7,7 +7,7 @@ import java.net.Socket;
 import Server.Model.Database;
 import Server.Model.Operacao;
 
-public class MessageController {
+public abstract class MessageController {
 	
 	Database db;
 	String[] campos;
@@ -54,11 +54,11 @@ public class MessageController {
 		out.println(msg);
 	}
 		
-	public void insert() throws IOException {}
-	public void update() throws IOException {}
-	public void get() throws IOException {}
-	public void delete() throws IOException {}
-	public void list() throws IOException {}
+	public abstract void insert() throws IOException;
+	public abstract void update() throws IOException;
+	public abstract void get() throws IOException;
+	public abstract void delete() throws IOException;
+	public abstract void list() throws IOException;
 	public void add_jogador() throws IOException {}
 	public void add_tecnico() throws IOException {}
 }
