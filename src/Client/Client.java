@@ -1,51 +1,90 @@
-package Client;
+	package Client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
+	import javax.swing.JFrame;
+	import javax.swing.JPanel;
+	import java.awt.BorderLayout;
+	import javax.swing.JLabel;
+	import javax.swing.JOptionPane;
+	import javax.swing.JTextField;
+	import java.awt.Dimension;
+	import javax.swing.SwingConstants;
 
-public class Client {
-	
-	public static void main (String[] args) throws IOException, InterruptedException {
-	
-		System.out.println("Criando conexão...");
+	import Client.View.MainView;
+
+	import javax.swing.JButton;
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+	import java.io.IOException;
+	import java.net.Socket;
+
+	@SuppressWarnings("serial")
+	public class Client extends JFrame {
+
+		private JPanel center;
+		private JLabel lblIp;
+		private JTextField tfIp;
+		private JLabel lblPorta;
+		private JTextField tfPorta;
+		private JButton btnConectar;
 		
-		String[] msgs = new String[8];
-		msgs[0] = "INSERT;PESSOA;12345678900;DANIEL;RIO DO SUL";
-		msgs[1] = "INSERT;PESSOA;12345678901;DANIEL KLUG;RIO DO SUL";
-		msgs[2] = "UPDATE;PESSOA;12345678900;DANIEL LARION KLUG;RIO DO SUL";
-		msgs[3] = "LIST;PESSOA";
-		msgs[4] = "GET;PESSOA;12345678900";
-		msgs[5] = "GET;PESSOA;12345678901";
-		msgs[6] = "DELETE;PESSOA;12345678901";
-		msgs[7] = "LIST;PESSOA";
-		
-		for(int i = 0; i < msgs.length; i++) {
-			
-			try (Socket conn = new Socket ("127.0.0.1", 80);) {
-				//System.out.println("Conectando");
-				OutputStream out = conn.getOutputStream();
-				
-				out.write(msgs[i].getBytes());
-				
-				InputStream in = conn.getInputStream();
-				byte[] dadosBrutos = new byte[1024];
-				int qtdBytesLidos = in.read(dadosBrutos);
-				String msgIn = null;
-				while(qtdBytesLidos >= 0) {
-					msgIn = new String (dadosBrutos, 0, qtdBytesLidos);
-					System.out.println(msgIn);
-					qtdBytesLidos = in.read(dadosBrutos);
-				}
-				
-			} catch (UnknownHostException e) {
-				System.out.println("Host não encontrado");
-				e.printStackTrace();
-			}
-			
+		public static void main(String[] args) {
+			Client client = new Client();
+			client.setVisible(true);
 		}
-	}
+		
+		public Client() {
+			initialize();
+		}
 
-}
+		private void initialize() {
+			setResizable(false);
+			setBounds(100, 100, 200, 180);
+			setLocationRelativeTo(null);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			center = new JPanel();
+			getContentPane().add(center, BorderLayout.CENTER);
+			
+			lblIp = new JLabel("IP:");
+			lblIp.setHorizontalAlignment(SwingConstants.CENTER);
+			lblIp.setPreferredSize(new Dimension(100, 20));
+			center.add(lblIp);
+			
+			tfIp = new JTextField();
+			tfIp.setColumns(15);
+			center.add(tfIp);
+			
+			lblPorta = new JLabel("Porta:");
+			lblPorta.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPorta.setPreferredSize(new Dimension(100, 20));
+			center.add(lblPorta);
+			
+			tfPorta = new JTextField();
+			tfPorta.setColumns(15);
+			center.add(tfPorta);
+			
+			btnConectar = new JButton("Consultar");
+			btnConectar.setPreferredSize(new Dimension(120, 30));
+			btnConectar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					conectar(e);
+				}
+			});
+			center.add(btnConectar);
+		}
+		
+		private void conectar(ActionEvent e) {
+			try {
+				Socket conn = new Socket (tfIp.getText(), Integer.parseInt(tfPorta.getText()));
+				MainView view = new MainView(tfIp.getText(), Integer.parseInt(tfPorta.getText()));
+				conn.close();
+				view.setVisible(true);
+				this.setVisible(false);
+			} catch (IOException ex) {
+				System.out.println("Deu exception");
+				JOptionPane.showMessageDialog(null, "Servidor incorreto!", "Erro", JOptionPane.ERROR_MESSAGE);
+	            ex.printStackTrace();
+			}
+		}
+
+	}

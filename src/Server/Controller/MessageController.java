@@ -1,29 +1,24 @@
 package Server.Controller;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
-
-import Server.Model.Database;
-import Server.Model.Operacao;
 
 public abstract class MessageController {
 	
-	Socket conn;
 	Database db;
 	String[] campos;
 	Operacao operacao;
-	OutputStream out;
+	Socket conn;
 		
-	public MessageController(Socket conn, Database db, String[] campos, Operacao operacao) throws IOException {
-		this.conn = conn;
+	public MessageController(Database db, String[] campos, Operacao operacao) throws IOException {
 		this.db = db;
 		this.campos = campos;
 		this.operacao = operacao;
-		this.out = conn.getOutputStream();
 	}
 
-	public void comando() throws IOException {		
+	public void comando(Socket conn) throws IOException {
+		this.conn = conn;
 		switch (this.operacao) {
 		case INSERT:
 			insert();
@@ -40,9 +35,20 @@ public abstract class MessageController {
 		case LIST:
 			list();
 			break;
+		case ADD_JOGADOR:
+			add_jogador();
+			break;
+		case ADD_TECNICO:
+			add_tecnico();
+			break;
 		default:
 			break;
 		}
+	}
+	
+	protected void msgOut(String msg) throws IOException {
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+		out.println(msg);
 	}
 		
 	public abstract void insert() throws IOException;
@@ -50,4 +56,6 @@ public abstract class MessageController {
 	public abstract void get() throws IOException;
 	public abstract void delete() throws IOException;
 	public abstract void list() throws IOException;
+	public void add_jogador() throws IOException {}
+	public void add_tecnico() throws IOException {}
 }
