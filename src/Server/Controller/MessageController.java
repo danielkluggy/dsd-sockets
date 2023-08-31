@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import Server.Model.Database;
-import Server.Model.Operacao;
-
 public abstract class MessageController {
 	
 	Database db;
