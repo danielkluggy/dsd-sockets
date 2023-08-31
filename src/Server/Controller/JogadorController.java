@@ -2,9 +2,7 @@ package Server.Controller;
 
 import java.io.IOException;
 
-import Server.Model.Database;
 import Server.Model.Jogador;
-import Server.Model.Operacao;
 import Server.Model.Tecnico;
 
 public class JogadorController extends MessageController {

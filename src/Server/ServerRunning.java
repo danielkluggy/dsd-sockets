@@ -7,12 +7,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import Server.Controller.Database;
 import Server.Controller.JogadorController;
+import Server.Controller.Operacao;
 import Server.Controller.TecnicoController;
 import Server.Controller.TimeController;
-import Server.Model.Database;
 import Server.Model.Modelo;
-import Server.Model.Operacao;
 
 public class ServerRunning {
 	

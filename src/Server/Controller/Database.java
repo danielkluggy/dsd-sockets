@@ -1,7 +1,11 @@
-package Server.Model;
+package Server.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Server.Model.Jogador;
+import Server.Model.Tecnico;
+import Server.Model.Time;
 
 public class Database {
 	

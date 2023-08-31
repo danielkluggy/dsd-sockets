@@ -2,9 +2,7 @@ package Server.Controller;
 
 import java.io.IOException;
 
-import Server.Model.Database;
 import Server.Model.Jogador;
-import Server.Model.Operacao;
 import Server.Model.Tecnico;
 import Server.Model.Time;
 
@@ -115,12 +113,12 @@ public class TimeController extends MessageController {
 		String msg = "";
 		msg = String.valueOf(db.times.size());
 		for(Time time : db.times) {
-			msg += "\n -> " + time.toString();
+			msg += "\n" + time.toString();
 			for(Tecnico tecnico : time.getTecnicos()) {
-				msg += "\n\t -> " + tecnico;
+				msg += "\n\t" + tecnico;
 			}
 			for(Jogador jogador : time.getJogadores()) {
-				msg += "\n\t -> " + jogador;
+				msg += "\n\t" + jogador;
 			}
 		}
 		msgOut(msg);
