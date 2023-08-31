@@ -2,7 +2,6 @@ package Client.View;
 
 public enum Modelo {
 	SELECIONE,
-	JOGADOR,
-	TECNICO,
+	PESSOA,
 	TIME
 }
