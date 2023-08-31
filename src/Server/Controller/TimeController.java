@@ -2,8 +2,7 @@ package Server.Controller;
 
 import java.io.IOException;
 
-import Server.Model.Jogador;
-import Server.Model.Tecnico;
+import Server.Model.Pessoa;
 import Server.Model.Time;
 
 public class TimeController extends MessageController {
@@ -62,11 +61,8 @@ public class TimeController extends MessageController {
 				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					msg = time.toString();
-					for(Tecnico tecnico : time.getTecnicos()) {
-						msg += "\n\t" + tecnico;
-					}
-					for(Jogador jogador : time.getJogadores()) {
-						msg += "\n\t" + jogador;
+					for(Pessoa pessoa : time.getPessoas()) {
+						msg += "\n\t" + pessoa;
 					}
 					break;
 				}
@@ -88,11 +84,8 @@ public class TimeController extends MessageController {
 			for(Time time : db.times) {
 				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
-					for(Jogador jogador : db.times.get(db.times.indexOf(time)).getJogadores()) {
-						jogador.setTime(null);
-					}
-					for(Tecnico tecnico : db.times.get(db.times.indexOf(time)).getTecnicos()) {
-						tecnico.setTime(null);
+					for(Pessoa pessoa : db.times.get(db.times.indexOf(time)).getPessoas()) {
+						pessoa.setTime(null);
 					}
 					db.times.remove(time);
 					msg = "Time removido com sucesso";
@@ -114,18 +107,15 @@ public class TimeController extends MessageController {
 		msg = String.valueOf(db.times.size());
 		for(Time time : db.times) {
 			msg += "\n" + time.toString();
-			for(Tecnico tecnico : time.getTecnicos()) {
-				msg += "\n\t" + tecnico;
-			}
-			for(Jogador jogador : time.getJogadores()) {
-				msg += "\n\t" + jogador;
+			for(Pessoa pessoa : time.getPessoas()) {
+				msg += "\n\t" + pessoa;
 			}
 		}
 		msgOut(msg);
 	}
 	
 	@Override
-	public void add_jogador() throws IOException {
+	public void add_pessoa() throws IOException {
 		String msg = "";
 		boolean timeExiste = false;
 		if(db.times.size() > 0) {
@@ -133,27 +123,27 @@ public class TimeController extends MessageController {
 				if(time.getNome().equals(campos[2])) {
 					timeExiste = true;
 					boolean cpfExiste = false;
-					if(db.jogadores.size() > 0) {
-						for(Jogador jogador : db.jogadores) {
-							if(jogador.getCpf().equals(campos[3])) {
-								if (jogador.getTime() == null) {
+					if(db.pessoas.size() > 0) {
+						for(Pessoa pessoa : db.pessoas) {
+							if(pessoa.getCpf().equals(campos[3])) {
+								if (pessoa.getTime() == null) {
 									cpfExiste = true;
-									time.addJogador(jogador);
-									jogador.setTime(time);
-									msg = "Jogador adicionado ao time";
+									time.addPessoa(pessoa);
+									pessoa.setTime(time);
+									msg = "Pessoa adicionada ao time";
 									break;
 								} else {
 									cpfExiste = true;
-									msg = "Jogador já possui time";
+									msg = "Pessoa já possui time";
 									break;
 								}
 							}
 						}
 						if(cpfExiste == false) {
-							msg = "Jogador não encontrado";
+							msg = "Pessoa não encontrada";
 						}
 					} else {
-						msg = "Sem jogadores cadastrados";
+						msg = "Sem pessoas cadastradas";
 					}
 					break;
 				}
@@ -167,46 +157,4 @@ public class TimeController extends MessageController {
 		msgOut(msg);
 	}
 	
-	@Override
-	public void add_tecnico() throws IOException {
-		String msg = "";
-		boolean timeExiste = false;
-		if(db.times.size() > 0) {
-			for(Time time : db.times) {
-				if(time.getNome().equals(campos[2])) {
-					timeExiste = true;
-					boolean cpfExiste = false;
-					if(db.tecnicos.size() > 0) {
-						for(Tecnico tecnico : db.tecnicos) {
-							if(tecnico.getCpf().equals(campos[3])) {
-								if (tecnico.getTime() == null) {
-									cpfExiste = true;
-									time.addTecnico(tecnico);
-									tecnico.setTime(time);
-									msg = "Técnico adicionado ao time";
-									break;
-								} else {
-									cpfExiste = true;
-									msg = "Técnico já possui time";
-									break;
-								}
-							}
-						}
-						if(cpfExiste == false) {
-							msg = "Técnico não encontrado";
-						}
-					} else {
-						msg = "Sem técnicos cadastrados";
-					}
-					break;
-				}
-			}
-			if(timeExiste == false) {
-				msg = "Time não encontrado";
-			}
-		} else {
-			msg = "Sem times cadastrados";
-		}
-		msgOut(msg);
-	}
 }

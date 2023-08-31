@@ -7,13 +7,11 @@ public class Time {
 	
 	private String nome;
 	private String liga;
-	private List<Tecnico> tecnicos;
-	private List<Jogador> jogadores;
+	private List<Pessoa> pessoas;
 	
 	public Time(String nome) {
 		this.nome = nome;
-		this.tecnicos = new ArrayList<Tecnico>();
-		this.jogadores = new ArrayList<Jogador>();
+		this.pessoas = new ArrayList<Pessoa>();
 	}
 
 	public String getNome() {
@@ -32,33 +30,21 @@ public class Time {
 		this.liga = liga;
 	}
 
-	public List<Tecnico> getTecnicos() {
-		return tecnicos;
+	public List<Pessoa> getPessoas() {
+		return pessoas;
 	}
 
-	public void addTecnico(Tecnico tecnico) {
-		this.tecnicos.add(tecnico);
+	public void addPessoa(Pessoa pessoa) {
+		this.pessoas.add(pessoa);
 	}
 	
-	public void removeTecnico(Tecnico tecnico) {
-		this.tecnicos.remove(tecnico);
-	}
-
-	public List<Jogador> getJogadores() {
-		return jogadores;
-	}
-
-	public void addJogador(Jogador jogador) {
-		this.jogadores.add(jogador);
-	}
-	
-	public void removeJogador(Jogador jogador) {
-		this.jogadores.remove(jogador);
+	public void removePessoa(Pessoa pessoa) {
+		this.pessoas.remove(pessoa);
 	}
 
 	@Override
 	public String toString() {
-		return nome + ";" + liga + ";TECNICOS=" + tecnicos.size() + ";JOGADORES=" + jogadores.size();
+		return nome + ";" + liga + ";PESSOAS=" + pessoas.size();
 	}
 	
 	

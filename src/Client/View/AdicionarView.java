@@ -37,10 +37,6 @@ public class AdicionarView extends JFrame {
 	private JTextField tfNome;
 	private JLabel lblEndereco;
 	private JTextField tfEndereco;
-	private JLabel lblPosicao;
-	private JTextField tfPosicao;
-	private JLabel lblEspecialidade;
-	private JTextField tfEspecialidade;
 	private JLabel lblLiga;
 	private JTextField tfLiga;
 	private JButton btnAdicionar;
@@ -110,24 +106,6 @@ public class AdicionarView extends JFrame {
 		tfEndereco.setColumns(55);
 		campos.add(tfEndereco);
 		
-		lblPosicao = new JLabel("Posição:");
-		lblPosicao.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblPosicao.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblPosicao);
-		
-		tfPosicao = new JTextField();
-		tfPosicao.setColumns(55);
-		campos.add(tfPosicao);
-		
-		lblEspecialidade = new JLabel("Especialidade:");
-		lblEspecialidade.setPreferredSize(new Dimension(100, 20));
-		lblEspecialidade.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblEspecialidade);
-		
-		tfEspecialidade = new JTextField();
-		tfEspecialidade.setColumns(55);
-		campos.add(tfEspecialidade);
-		
 		lblLiga = new JLabel("Liga:");
 		lblLiga.setPreferredSize(new Dimension(100, 20));
 		lblLiga.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -179,24 +157,13 @@ public class AdicionarView extends JFrame {
 	private void salvar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
 		String msgEnvio = "INSERT;";
-		if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+		if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
 			if (tfNome.getText().isEmpty())
 				msgErro += "\nNome inválido!";
 			if (tfEndereco.getText().isEmpty())
 				msgErro += "\nEndereço inválido!";
-			if (tfPosicao.getText().isEmpty())
-				msgErro += "\nPosição inválida!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
-				msgErro += "\nCPF inválido!";
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
-			if (tfEndereco.getText().isEmpty())
-				msgErro += "\nEndereço inválido!";
-			if (tfEspecialidade.getText().isEmpty())
-				msgErro += "\nEspecialidade inválida!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 			if (tfNome.getText().isEmpty())
 				msgErro += "\nNome inválido!";
@@ -207,16 +174,10 @@ public class AdicionarView extends JFrame {
 			mensagemErro(msgErro);
 		} else {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
-			if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+			if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 				msgEnvio += tfCPF.getText() + ";";
 				msgEnvio += tfNome.getText() + ";";
 				msgEnvio += tfEndereco.getText() + ";";
-				msgEnvio += tfPosicao.getText();
-			} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-				msgEnvio += tfCPF.getText() + ";";
-				msgEnvio += tfNome.getText() + ";";
-				msgEnvio += tfEndereco.getText() + ";";
-				msgEnvio += tfEspecialidade.getText();
 			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 				msgEnvio += tfNome.getText() + ";";
 				msgEnvio += tfLiga.getText();
@@ -224,7 +185,6 @@ public class AdicionarView extends JFrame {
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
 			txtConsole.setText(socket.msgIn());
-			
 		}
 	}
 	
@@ -243,12 +203,6 @@ public class AdicionarView extends JFrame {
 		tfEndereco.setVisible(false);
 		tfEndereco.setText("");
 		lblEndereco.setVisible(false);
-		tfPosicao.setVisible(false);
-		tfPosicao.setText("");
-		lblPosicao.setVisible(false);
-		tfEspecialidade.setVisible(false);
-		tfEspecialidade.setText("");
-		lblEspecialidade.setVisible(false);
 		tfLiga.setVisible(false);
 		tfLiga.setText("");
 		lblLiga.setVisible(false);
@@ -266,7 +220,7 @@ public class AdicionarView extends JFrame {
 	private void selectModel(ActionEvent e) {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
+		} else if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
@@ -274,21 +228,6 @@ public class AdicionarView extends JFrame {
 			lblNome.setVisible(true);
 			tfEndereco.setVisible(true);
 			lblEndereco.setVisible(true);
-			tfPosicao.setVisible(true);
-			lblPosicao.setVisible(true);
-			btnAdicionar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
-			limpar();
-			tfCPF.setVisible(true);
-			lblCPF.setVisible(true);
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfEndereco.setVisible(true);
-			lblEndereco.setVisible(true);
-			tfEspecialidade.setVisible(true);
-			lblEspecialidade.setVisible(true);
 			btnAdicionar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);

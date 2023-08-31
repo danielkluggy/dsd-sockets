@@ -8,9 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import Server.Controller.Database;
-import Server.Controller.JogadorController;
+import Server.Controller.PessoaController;
 import Server.Controller.Operacao;
-import Server.Controller.TecnicoController;
 import Server.Controller.TimeController;
 import Server.Model.Modelo;
 
@@ -58,17 +57,13 @@ public class ServerRunning {
 		String[] campos = mensagem.toUpperCase().split(";");
 		Operacao operacao = Operacao.valueOf(campos[0]);
 		Modelo modelo = Modelo.valueOf(campos[1]);
-		JogadorController jogador = new JogadorController(db, campos, operacao);
-		TecnicoController tecnico = new TecnicoController(db, campos, operacao);
+		PessoaController pessoa = new PessoaController(db, campos, operacao);
 		TimeController time = new TimeController(db, campos, operacao);
 		
 		
 		switch (modelo) {
-		case JOGADOR:
-			jogador.comando(conn);
-			break;
-		case TECNICO:
-			tecnico.comando(conn);
+		case PESSOA:
+			pessoa.comando(conn);
 			break;
 		case TIME:
 			time.comando(conn);

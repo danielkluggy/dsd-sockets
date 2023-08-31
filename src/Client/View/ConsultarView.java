@@ -139,14 +139,14 @@ public class ConsultarView extends JFrame {
 	private void consultar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
 		String msgEnvio = "";
-		if (cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		if (cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			if (!tfCPF.getText().isEmpty() && !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
 		}
 		if (msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
-			if (cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+			if (cbSelect.getSelectedItem() == Modelo.PESSOA) {
 				if(tfCPF.getText().isEmpty()) {
 					msgEnvio = "LIST;" + cbSelect.getSelectedItem();
 				} else {
@@ -193,7 +193,7 @@ public class ConsultarView extends JFrame {
 	private void selectModel(ActionEvent e) {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		} else if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);

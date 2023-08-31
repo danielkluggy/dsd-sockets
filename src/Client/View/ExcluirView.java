@@ -135,7 +135,7 @@ public class ExcluirView extends JFrame {
 	private void salvar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
 		String msgEnvio = "DELETE;";
-		if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
 		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
@@ -146,7 +146,7 @@ public class ExcluirView extends JFrame {
 			mensagemErro(msgErro);
 		} else {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
-			if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+			if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 				msgEnvio += tfCPF.getText() + ";";
 			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
 				msgEnvio += tfNome.getText() + ";";
@@ -182,7 +182,7 @@ public class ExcluirView extends JFrame {
 	private void selectModel(ActionEvent e) {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		} else if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);

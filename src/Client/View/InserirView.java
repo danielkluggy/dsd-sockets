@@ -76,7 +76,7 @@ public class InserirView extends JFrame {
 		cbSelect.setPreferredSize(new Dimension(300, 25));
 		cbSelect.setMaximumRowCount(4);
 		cbSelect.setModel(new DefaultComboBoxModel<Modelo>(Modelo.values()));
-		cbSelect.removeItemAt(3);
+		cbSelect.removeItemAt(2);
 		cbSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectModel(e);
@@ -138,7 +138,7 @@ public class InserirView extends JFrame {
 	private void salvar(ActionEvent e) throws IOException {	
 		String msgErro = "Erro:";
 		String msgEnvio = "ADD_";
-		if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			if (tfNome.getText().isEmpty())
 				msgErro += "\nNome do time inválido!";
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
@@ -147,11 +147,7 @@ public class InserirView extends JFrame {
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
 		} else {
-			if(cbSelect.getSelectedItem() == Modelo.JOGADOR) {
-				msgEnvio += cbSelect.getSelectedItem() + ";TIME;";
-				msgEnvio += tfNome.getText() + ";";
-				msgEnvio += tfCPF.getText();
-			} else if(cbSelect.getSelectedItem() == Modelo.TECNICO) {
+			if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 				msgEnvio += cbSelect.getSelectedItem() + ";TIME;";
 				msgEnvio += tfNome.getText() + ";";
 				msgEnvio += tfCPF.getText();
@@ -187,7 +183,7 @@ public class InserirView extends JFrame {
 		if(cbSelect.getSelectedItem() == Modelo.SELECIONE) {
 			limpar();
 			tfNome.setText("");
-		} else if(cbSelect.getSelectedItem() == Modelo.JOGADOR || cbSelect.getSelectedItem() == Modelo.TECNICO) {
+		} else if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
