@@ -35,9 +35,6 @@ public abstract class MessageController {
 		case LIST:
 			list();
 			break;
-		case ADD_PESSOA:
-			add_pessoa();
-			break;
 		default:
 			break;
 		}
@@ -53,5 +50,4 @@ public abstract class MessageController {
 	public abstract void get() throws IOException;
 	public abstract void delete() throws IOException;
 	public abstract void list() throws IOException;
-	public void add_pessoa() throws IOException {}
 }

@@ -35,8 +35,6 @@ public class ConsultarView extends JFrame {
 	private JPanel campos;
 	private JLabel lblCPF;
 	private JTextField tfCPF;
-	private JLabel lblNome;
-	private JTextField tfNome;
 	private JButton btnConsultar;
 	private JButton btnCancelar;
 	private JPanel console;
@@ -85,16 +83,6 @@ public class ConsultarView extends JFrame {
 		tfCPF = new JTextField();
 		campos.add(tfCPF);
 		tfCPF.setColumns(55);
-		
-		lblNome = new JLabel("Nome:");
-		lblNome.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNome.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblNome);
-		
-		tfNome = new JTextField();
-		campos.add(tfNome);
-		tfNome.setColumns(55);
-		
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setPreferredSize(new Dimension(150, 30));
@@ -153,13 +141,6 @@ public class ConsultarView extends JFrame {
 					msgEnvio = "GET;" + cbSelect.getSelectedItem() + ";";
 					msgEnvio += tfCPF.getText();
 				}
-			} else if (cbSelect.getSelectedItem() == Modelo.TIME) {
-				if(tfNome.getText().isEmpty()) {
-					msgEnvio = "LIST;" + cbSelect.getSelectedItem();
-				} else {
-					msgEnvio = "GET;" + cbSelect.getSelectedItem() + ";";
-					msgEnvio += tfNome.getText();
-				}
 			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
@@ -177,9 +158,6 @@ public class ConsultarView extends JFrame {
 		tfCPF.setVisible(false);
 		tfCPF.setText("");
 		lblCPF.setVisible(false);
-		tfNome.setVisible(false);
-		tfNome.setText("");
-		lblNome.setVisible(false);
 		btnConsultar.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
@@ -197,13 +175,6 @@ public class ConsultarView extends JFrame {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
-			btnConsultar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			limpar();
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
 			btnConsultar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);

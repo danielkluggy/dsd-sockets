@@ -33,8 +33,6 @@ public class ExcluirView extends JFrame {
 	private JPanel campos;
 	private JLabel lblCPF;
 	private JTextField tfCPF;
-	private JLabel lblNome;
-	private JTextField tfNome;
 	private JButton btnExcluir;
 	private JButton btnCancelar;
 	private JPanel console;
@@ -84,15 +82,6 @@ public class ExcluirView extends JFrame {
 		campos.add(tfCPF);
 		tfCPF.setColumns(55);
 		
-		lblNome = new JLabel("Nome:");
-		lblNome.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNome.setPreferredSize(new Dimension(100, 20));
-		campos.add(lblNome);
-		
-		tfNome = new JTextField();
-		campos.add(tfNome);
-		tfNome.setColumns(55);
-		
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setPreferredSize(new Dimension(150, 30));
 		btnExcluir.addActionListener(new ActionListener() {
@@ -138,9 +127,6 @@ public class ExcluirView extends JFrame {
 		if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 			if (tfCPF.getText().isEmpty() || !tfCPF.getText().matches("[0-9]+"))
 				msgErro += "\nCPF inválido!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
@@ -148,8 +134,6 @@ public class ExcluirView extends JFrame {
 			msgEnvio += cbSelect.getSelectedItem() + ";";
 			if(cbSelect.getSelectedItem() == Modelo.PESSOA) {
 				msgEnvio += tfCPF.getText() + ";";
-			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-				msgEnvio += tfNome.getText() + ";";
 			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
@@ -166,9 +150,6 @@ public class ExcluirView extends JFrame {
 		tfCPF.setVisible(false);
 		tfCPF.setText("");
 		lblCPF.setVisible(false);
-		tfNome.setVisible(false);
-		tfNome.setText("");
-		lblNome.setVisible(false);
 		btnExcluir.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
@@ -186,13 +167,6 @@ public class ExcluirView extends JFrame {
 			limpar();
 			tfCPF.setVisible(true);
 			lblCPF.setVisible(true);
-			btnExcluir.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			limpar();
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
 			btnExcluir.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);

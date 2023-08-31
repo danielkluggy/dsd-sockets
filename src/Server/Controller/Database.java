@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Server.Model.Pessoa;
-import Server.Model.Time;
 
 public class Database {
 	
@@ -13,9 +12,6 @@ public class Database {
 	}
 	
 	public List<Pessoa> pessoas = new ArrayList<>();
-	
-	public List<Time> times = new ArrayList<>();
-	
 	
 	private void mock() {
 		Pessoa p1 = new Pessoa("12345678901");
@@ -28,18 +24,6 @@ public class Database {
 		p2.setEndereco("IBIRAMA");
 		pessoas.add(p2);
 		
-		Time team1 = new Time("TIME 1");
-		team1.setLiga("NBA");
-		times.add(team1);
-		
-		Time team2 = new Time("TIME 2");
-		team2.setLiga("NBA");
-		times.add(team2);
-		
-		team1.addPessoa(p1);
-		p1.setTime(team1);
-		team1.addPessoa(p2);
-		p2.setTime(team1);
 	}
 	
 }

@@ -37,8 +37,6 @@ public class AdicionarView extends JFrame {
 	private JTextField tfNome;
 	private JLabel lblEndereco;
 	private JTextField tfEndereco;
-	private JLabel lblLiga;
-	private JTextField tfLiga;
 	private JButton btnAdicionar;
 	private JButton btnCancelar;
 	private JPanel console;
@@ -106,15 +104,6 @@ public class AdicionarView extends JFrame {
 		tfEndereco.setColumns(55);
 		campos.add(tfEndereco);
 		
-		lblLiga = new JLabel("Liga:");
-		lblLiga.setPreferredSize(new Dimension(100, 20));
-		lblLiga.setHorizontalAlignment(SwingConstants.TRAILING);
-		campos.add(lblLiga);
-		
-		tfLiga = new JTextField();
-		tfLiga.setColumns(55);
-		campos.add(tfLiga);
-		
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.setPreferredSize(new Dimension(150, 30));
 		btnAdicionar.addActionListener(new ActionListener() {
@@ -164,11 +153,6 @@ public class AdicionarView extends JFrame {
 				msgErro += "\nNome inválido!";
 			if (tfEndereco.getText().isEmpty())
 				msgErro += "\nEndereço inválido!";
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			if (tfNome.getText().isEmpty())
-				msgErro += "\nNome inválido!";
-			if (tfLiga.getText().isEmpty())
-				msgErro += "\nLiga inválida!";
 		}
 		if(msgErro != "Erro:") {
 			mensagemErro(msgErro);
@@ -178,9 +162,6 @@ public class AdicionarView extends JFrame {
 				msgEnvio += tfCPF.getText() + ";";
 				msgEnvio += tfNome.getText() + ";";
 				msgEnvio += tfEndereco.getText() + ";";
-			} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-				msgEnvio += tfNome.getText() + ";";
-				msgEnvio += tfLiga.getText();
 			}
 			SocketController socket = new SocketController(view.getIp(), view.getPorta());
 			socket.msgOut(msgEnvio);
@@ -203,9 +184,6 @@ public class AdicionarView extends JFrame {
 		tfEndereco.setVisible(false);
 		tfEndereco.setText("");
 		lblEndereco.setVisible(false);
-		tfLiga.setVisible(false);
-		tfLiga.setText("");
-		lblLiga.setVisible(false);
 		btnAdicionar.setVisible(false);
 		btnCancelar.setVisible(false);
 		txtConsole.setVisible(false);
@@ -228,15 +206,6 @@ public class AdicionarView extends JFrame {
 			lblNome.setVisible(true);
 			tfEndereco.setVisible(true);
 			lblEndereco.setVisible(true);
-			btnAdicionar.setVisible(true);
-			btnCancelar.setVisible(true);
-			txtConsole.setVisible(true);
-		} else if(cbSelect.getSelectedItem() == Modelo.TIME) {
-			limpar();
-			tfNome.setVisible(true);
-			lblNome.setVisible(true);
-			tfLiga.setVisible(true);
-			lblLiga.setVisible(true);
 			btnAdicionar.setVisible(true);
 			btnCancelar.setVisible(true);
 			txtConsole.setVisible(true);

@@ -85,16 +85,6 @@ public class MainView extends JFrame {
 		});
 		panel.add(btnConsultar);
 		
-		JButton btnInserir = new JButton("Inserir no Time");
-		btnInserir.setPreferredSize(new Dimension(200, 30));
-		btnInserir.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				acaoBtnInserir(e);
-			}
-		});
-		panel.add(btnInserir);
 	}
 	
 	public void acaoBtnAdicionar(ActionEvent acao) {
@@ -121,10 +111,4 @@ public class MainView extends JFrame {
 		this.setVisible(false);
 	}
 	
-	public void acaoBtnInserir(ActionEvent acao) {
-		InserirView inserirView = new InserirView(this);
-		inserirView.setVisible(true);
-		this.setVisible(false);
-	}
-
 }

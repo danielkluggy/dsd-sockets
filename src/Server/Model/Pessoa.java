@@ -5,7 +5,6 @@ public class Pessoa {
 	private String cpf;
 	private String nome;
 	private String endereco;
-	private Time time;
 
 	public Pessoa(String cpf) {
 		this.cpf = cpf;
@@ -31,14 +30,6 @@ public class Pessoa {
 		this.endereco = endereco;
 	}
 	
-	public Time getTime() {
-		return time;
-	}
-
-	public void setTime(Time time) {
-		this.time = time;
-	}
-
 	@Override
 	public String toString() {
 		return cpf + ";" + nome + ";" + endereco;

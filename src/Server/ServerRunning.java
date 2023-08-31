@@ -10,7 +10,6 @@ import java.net.Socket;
 import Server.Controller.Database;
 import Server.Controller.PessoaController;
 import Server.Controller.Operacao;
-import Server.Controller.TimeController;
 import Server.Model.Modelo;
 
 public class ServerRunning {
@@ -58,15 +57,11 @@ public class ServerRunning {
 		Operacao operacao = Operacao.valueOf(campos[0]);
 		Modelo modelo = Modelo.valueOf(campos[1]);
 		PessoaController pessoa = new PessoaController(db, campos, operacao);
-		TimeController time = new TimeController(db, campos, operacao);
-		
 		
 		switch (modelo) {
 		case PESSOA:
 			pessoa.comando(conn);
 			break;
-		case TIME:
-			time.comando(conn);
 		default:
 			break;
 		}

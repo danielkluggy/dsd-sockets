@@ -82,9 +82,6 @@ public class PessoaController extends MessageController {
 				if(pessoa.getCpf().equals(campos[2])) {
 					cpfExiste = true;
 					db.pessoas.remove(pessoa);
-					if(pessoa.getTime() != null) {
-						pessoa.getTime().removePessoa(pessoa);
-					}
 					msg = "Pessoa removida com sucesso";
 					break;
 				}

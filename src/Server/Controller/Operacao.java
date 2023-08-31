@@ -5,6 +5,5 @@ public enum Operacao {
 	UPDATE,
 	GET,
 	DELETE,
-	LIST,
-	ADD_PESSOA
+	LIST
 }
